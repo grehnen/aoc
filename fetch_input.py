@@ -2,6 +2,9 @@ import os
 import requests
 from datetime import datetime
 from typing import List
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def fetch_input(day: int):
@@ -10,9 +13,7 @@ def fetch_input(day: int):
         print(f"{filename} already exists. Skipping fetch.")
         return get_file_content(filename)
 
-    cookie = {
-        "session": "os.getenv("SESSION_COOKIE")"
-    }
+    cookie = {"session": os.getenv("SESSION_COOKIE")}
 
     url = f"https://adventofcode.com/2024/day/{day}/input"
 
