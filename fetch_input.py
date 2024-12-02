@@ -1,13 +1,14 @@
 import os
 import requests
 from datetime import datetime
+from typing import List
 
 
 def fetch_input(day: int):
     filename = f"input/d{day}.txt"
     if os.path.exists(filename):
         print(f"{filename} already exists. Skipping fetch.")
-        return
+        return get_file_content(filename)
 
     cookie = {
         "session": "os.getenv("SESSION_COOKIE")"
@@ -22,7 +23,12 @@ def fetch_input(day: int):
         file.write(response.text)
 
     print(f"Content fetched and saved to {filename}")
-    return filename
+    return get_file_content(filename)
+
+
+def get_file_content(filename: str) -> List[str]:
+    with open(filename, "r") as file:
+        return file.read().splitlines()
 
 
 if __name__ == "__main__":
