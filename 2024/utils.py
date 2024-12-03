@@ -4,7 +4,6 @@ import re
 from datetime import datetime
 from typing import List
 from dotenv import load_dotenv
-from typing import NamedTuple
 
 load_dotenv()
 
