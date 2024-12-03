@@ -1,6 +1,6 @@
 import os
 from typing import List
-from fetch_input import fetch_input
+from utils import fetch_input
 
 current_day = int("".join(filter(str.isdigit, os.path.basename(__file__))))
 
