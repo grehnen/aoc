@@ -9,7 +9,6 @@ load_dotenv()
 
 
 def fetch_input(
-    day: int = datetime.today().day, year: int = datetime.today().year
 ) -> List[str]:
     filename = f"input/d{day}.txt"
     if os.path.exists(filename):

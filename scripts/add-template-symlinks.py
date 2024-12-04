@@ -13,15 +13,16 @@ def create_symlinks(target_folder_name):
         sys.exit(1)
 
     # Get the templates
-    template_dir = os.path.join(base_dir, "templates")
+    template_dir = os.path.join(base_dir, "template")
     if not os.path.isdir(template_dir):
-        print("Templates directory does not exist.")
+        print("Template directory does not exist.")
         sys.exit(1)
 
     template_files = [
         f
         for f in os.listdir(template_dir)
         if os.path.isfile(os.path.join(template_dir, f))
+        and not f.endswith(".gitignore")
     ]
 
     # Create symbolic links for each file in the target folder
