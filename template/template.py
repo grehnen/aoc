@@ -1,6 +1,6 @@
 import os
 from typing import List
-from utils import fetch_input
+from utils import fetch_input, Grid
 from datetime import datetime
 
 filename = os.path.basename(__file__)
