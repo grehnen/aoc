@@ -8,7 +8,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def fetch_input(day: int = datetime.today().day) -> List[str]:
+def fetch_input(
+    day: int = datetime.today().day, year: int = datetime.today().year
+) -> List[str]:
     filename = f"input/d{day}.txt"
     if os.path.exists(filename):
         print(f"{filename} already exists. Skipping fetch.")
@@ -16,7 +18,7 @@ def fetch_input(day: int = datetime.today().day) -> List[str]:
 
     cookie = {"session": os.getenv("SESSION_COOKIE")}
 
-    url = f"https://adventofcode.com/2024/day/{day}/input"
+    url = f"https://adventofcode.com/{year}/day/{day}/input"
 
     response = requests.get(url, cookies=cookie)
     response.raise_for_status()
@@ -197,5 +199,4 @@ class Grid:
 
 
 if __name__ == "__main__":
-    today = datetime.today().day
-    fetch_input(today)
+    fetch_input()
