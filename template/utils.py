@@ -9,7 +9,19 @@ load_dotenv()
 
 
 def fetch_input(
+    day: int = int(
+        "".join(filter(str.isdigit, os.path.basename(__file__))) or datetime.today().day
+        if datetime.today().day <= 25
+        else 1
+    ),
+    year: int = int(
+        "".join(filter(str.isdigit, os.path.basename(os.path.dirname(__file__))))
+        or datetime.today().year
+        if datetime.today().month == 12
+        else datetime.today().year - 1
+    ),
 ) -> List[str]:
+    os.makedirs("input", exist_ok=True)
     filename = f"input/d{day}.txt"
     if os.path.exists(filename):
         print(f"{filename} already exists. Skipping fetch.")
