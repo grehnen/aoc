@@ -23,7 +23,7 @@ def create_symlinks(target_folder_name, force=False):
         f
         for f in os.listdir(template_dir)
         if os.path.isfile(os.path.join(template_dir, f))
-        and not f.endswith(".gitignore")
+        and not f in [".gitignore", "template.py"]
     ]
 
     # Create symbolic links for each file in the target folder

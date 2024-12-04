@@ -3,5 +3,4 @@ __pycache__
 .env
 
 # Ignore all symlinked files
-template.py
 utils.py
