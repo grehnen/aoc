@@ -26,8 +26,8 @@ def create_symlinks(target_folder_name):
 
     # Create symbolic links for each file in the target folder
     for file_name in template_files:
-        source_path = os.path.join(template_dir, file_name)
-        link_path = os.path.join(target_folder_path, file_name)
+        source_path = os.path.abspath(os.path.join(template_dir, file_name))
+        link_path = os.path.abspath(os.path.join(target_folder_path, file_name))
         try:
             os.symlink(source_path, link_path)
             print(f"Created symlink: {link_path} -> {source_path}")
