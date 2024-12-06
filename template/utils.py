@@ -50,7 +50,55 @@ def ints(string: str) -> List[int]:
     return [int(i) for i in re.findall(r"-?\d+", string)]
 
 
-type coord = tuple[int, int]
+class Coord:
+    def __init__(self, *args):
+        if len(args) == 1 and isinstance(args[0], tuple):
+            self.x, self.y = args[0]
+        elif len(args) == 2 and all(isinstance(arg, int) for arg in args):
+            self.x, self.y = args
+        else:
+            raise TypeError("Coord() takes either a tuple or two integer arguments")
+
+    def __add__(self, other):
+        if isinstance(other, Coord):
+            return Coord(self.x + other.x, self.y + other.y)
+        elif (
+            isinstance(other, tuple)
+            and len(other) == 2
+            and all(isinstance(i, int) for i in other)
+        ):
+            return Coord(self.x + other[0], self.y + other[1])
+        else:
+            raise TypeError("Operand must be Coord or tuple of two integers")
+
+    def __mul__(self, other: int):
+        return Coord(self.x * other, self.y * other)
+
+    def __eq__(self, other: "Coord"):
+        return self.x == other[0] and self.y == other[1]
+
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
+
+    def __getitem__(self, index: int):
+        return (self.x, self.y)[index]
+
+    def __setitem__(self, index: int, value: int):
+        if index == 0:
+            self.x = value
+        elif index == 1:
+            self.y = value
+        else:
+            raise IndexError("Index out of range")
+
+    def __contains__(self, item):
+        return item in (self.x, self.y)
+
+    def __iter__(self):
+        return iter((self.x, self.y))
+
+    def __hash__(self):
+        return hash((self.x, self.y))
 
 
 class Grid:
@@ -70,13 +118,13 @@ class Grid:
         self.height = len(grid)
         self.width = len(grid[0])
 
-    def __getitem__(self, pos: coord):
+    def __getitem__(self, pos: Coord):
         x, y = pos
         if not self.is_in_bounds(pos):
             raise IndexError("Out of bounds")
         return self.grid[y][x]
 
-    def __setitem__(self, pos: coord, value):
+    def __setitem__(self, pos: Coord, value):
         x, y = pos
         if not self.is_in_bounds(pos):
             raise IndexError("Out of bounds")
@@ -85,24 +133,27 @@ class Grid:
     def __str__(self):
         return "\n".join(self.grid)
 
-    def is_in_bounds(self, pos: coord) -> bool:
+    def copy(self):
+        return Grid(self.grid.copy())
+
+    def is_in_bounds(self, pos: Coord) -> bool:
         x, y = pos
         return 0 <= x < self.width and 0 <= y < self.height
 
     def count(self, char: str) -> int:
         return sum(row.count(char) for row in self.grid)
 
-    def find(self, string: str) -> coord:
+    def find(self, string: str) -> Coord | None:
         """
         Returns the first coordinate where the string is found
         """
         for y, row in enumerate(self.grid):
             x = row.find(string)
             if x != -1:
-                return x, y
-        raise ValueError(f"String '{string}' not found in grid")
+                return Coord(x, y)
+        return None
 
-    def find_all(self, string: str) -> List[coord]:
+    def find_all(self, string: str) -> List[Coord]:
         """
         Returns a list of all coordinates where the string is found
         """
@@ -115,8 +166,8 @@ class Grid:
         return coords
 
     def neighbors(
-        self, pos: coord, diagonal=True, distance=1, include_self=False
-    ) -> List[coord]:
+        self, pos: Coord, diagonal=True, distance=1, include_self=False
+    ) -> List[Coord]:
         x, y = pos
         offsets = [
             (dx, dy)
@@ -134,7 +185,7 @@ class Grid:
         ]
 
     def neighbor_values(
-        self, pos: coord, diagonal=True, distance=1, include_self=False
+        self, pos: Coord, diagonal=True, distance=1, include_self=False
     ) -> List[str]:
         return [
             self[coord]
