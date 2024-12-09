@@ -59,7 +59,7 @@ class Coord:
         else:
             raise TypeError("Coord() takes either a tuple or two integer arguments")
 
-    def __add__(self, other):
+    def __add__(self, other) -> "Coord":
         if isinstance(other, Coord):
             return Coord(self.x + other.x, self.y + other.y)
         elif (
@@ -71,16 +71,28 @@ class Coord:
         else:
             raise TypeError("Operand must be Coord or tuple of two integers")
 
-    def __mul__(self, other: int):
+    def __sub__(self, other) -> "Coord":
+        if isinstance(other, Coord):
+            return Coord(self.x - other.x, self.y - other.y)
+        elif (
+            isinstance(other, tuple)
+            and len(other) == 2
+            and all(isinstance(i, int) for i in other)
+        ):
+            return Coord(self.x - other[0], self.y - other[1])
+        else:
+            raise TypeError("Operand must be Coord or tuple of two integers")
+
+    def __mul__(self, other: int) -> "Coord":
         return Coord(self.x * other, self.y * other)
 
-    def __eq__(self, other: "Coord"):
+    def __eq__(self, other: "Coord") -> bool:
         return self.x == other[0] and self.y == other[1]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
 
-    def __getitem__(self, index: int):
+    def __getitem__(self, index: int) -> int:
         return (self.x, self.y)[index]
 
     def __setitem__(self, index: int, value: int):
@@ -133,6 +145,10 @@ class Grid:
     def __str__(self):
         return "\n".join(self.grid)
 
+    @staticmethod
+    def dots(height: int, width: int) -> "Grid":
+        return Grid(["." * width] * height)
+
     def copy(self):
         return Grid(self.grid.copy())
 
@@ -161,9 +177,15 @@ class Grid:
         for y, row in enumerate(self.grid):
             x = row.find(string)
             while x != -1:
-                coords.append((x, y))
+                coords.append(Coord(x, y))
                 x = row.find(string, x + 1)
         return coords
+
+    def get_char_set(self, ignore="") -> set[str]:
+        char_set = set(char for row in self.grid for char in row)
+        for char in ignore:
+            char_set.remove(char)
+        return char_set
 
     def neighbors(
         self, pos: Coord, diagonal=True, distance=1, include_self=False
