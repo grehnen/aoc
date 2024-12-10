@@ -197,7 +197,6 @@ class Grid:
             for dy in range(-distance, distance + 1)
             if dx or dy or include_self
         ]
-        print(offsets)
         if not diagonal:
             offsets = [(dx, dy) for dx, dy in offsets if dx == 0 or dy == 0]
         return [
