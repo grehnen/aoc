@@ -121,6 +121,33 @@ class Coord:
         return hash((self.x, self.y))
 
 
+class Vector(Coord):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def manhattan_distance(self) -> int:
+        return abs(self.x) + abs(self.y)
+
+    def chebyshev_distance(self) -> int:
+        return max(abs(self.x), abs(self.y))
+
+    def euclidean_distance(self) -> float:
+        return (self.x**2 + self.y**2) ** 0.5
+
+    def perpendicular(self) -> "Vector":
+        return Vector(self.y, -self.x)
+
+    def __neg__(self) -> "Vector":
+        return Vector(-self.x, -self.y)
+
+    @staticmethod
+    def all_directions(diagonal=True) -> List["Vector"]:
+        directions = [Vector(0, 1), Vector(1, 0), Vector(0, -1), Vector(-1, 0)]
+        if diagonal:
+            directions += [Vector(1, 1), Vector(-1, -1), Vector(1, -1), Vector(-1, 1)]
+        return directions
+
+
 class Grid:
     DIRECTIONS = [
         (0, 1),
@@ -196,7 +223,12 @@ class Grid:
         return char_set
 
     def neighbors(
-        self, pos: Coord, diagonal=True, distance=1, include_self=False
+        self,
+        pos: Coord,
+        diagonal=True,
+        distance=1,
+        include_self=False,
+        include_out_of_bounds=False,
     ) -> List[Coord]:
         x, y = pos
         offsets = [
@@ -210,7 +242,7 @@ class Grid:
         return [
             Coord(x + dx, y + dy)
             for dx, dy in offsets
-            if self.is_in_bounds(Coord(x + dx, y + dy))
+            if self.is_in_bounds(Coord(x + dx, y + dy)) or include_out_of_bounds
         ]
 
     def neighbor_values(
