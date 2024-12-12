@@ -53,6 +53,9 @@ def get_file_content(filename: str) -> List[str]:
 def ints(string: str) -> List[int]:
     return [int(i) for i in re.findall(r"-?\d+", string)]
 
+def floats(string: str) -> List[float]:
+    return [float(i) for i in re.findall(r"-?\d+(?:\.\d+)?", string)]
+
 
 class Coord:
     def __init__(self, *args):
