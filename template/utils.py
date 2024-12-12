@@ -27,7 +27,11 @@ def fetch_input(
         print(f"{filename} already exists. Skipping fetch.")
         return get_file_content(filename)
 
-    cookie = {"session": os.getenv("SESSION_COOKIE")}
+    session_cookie = os.getenv("SESSION_COOKIE")
+    if not session_cookie:
+        raise ValueError("SESSION_COOKIE environment variable is not set")
+
+    cookie = {"session": session_cookie}
 
     url = f"https://adventofcode.com/{year}/day/{day}/input"
 
@@ -86,8 +90,12 @@ class Coord:
     def __mul__(self, other: int) -> "Coord":
         return Coord(self.x * other, self.y * other)
 
-    def __eq__(self, other: "Coord") -> bool:
-        return self.x == other[0] and self.y == other[1]
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Coord):
+            return self.x == other.x and self.y == other.y
+        elif isinstance(other, tuple):
+            return self.x == other[0] and self.y == other[1]
+        return False
 
     def __repr__(self) -> str:
         return f"({self.x}, {self.y})"
@@ -200,9 +208,9 @@ class Grid:
         if not diagonal:
             offsets = [(dx, dy) for dx, dy in offsets if dx == 0 or dy == 0]
         return [
-            (x + dx, y + dy)
+            Coord(x + dx, y + dy)
             for dx, dy in offsets
-            if self.is_in_bounds((x + dx, y + dy))
+            if self.is_in_bounds(Coord(x + dx, y + dy))
         ]
 
     def neighbor_values(
@@ -223,8 +231,8 @@ class Grid:
                 for i in range(1, len(word)):
                     x, y = coord
                     if not (
-                        self.is_in_bounds((x + i * dx, y + i * dy))
-                        and self[x + i * dx, y + i * dy] == word[i]
+                        self.is_in_bounds(Coord(x + i * dx, y + i * dy))
+                        and self[Coord(x + i * dx, y + i * dy)] == word[i]
                     ):
                         valid = False
                         break
@@ -269,8 +277,8 @@ class Grid:
                     if pattern_char == wildcard:
                         continue
                     elif not (
-                        self.is_in_bounds((x + dx, y + dy))
-                        and self[x + dx, y + dy] == pattern_char
+                        self.is_in_bounds(Coord(x + dx, y + dy))
+                        and self[Coord(x + dx, y + dy)] == pattern_char
                     ):
                         valid = False
                         break
