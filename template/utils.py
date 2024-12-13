@@ -53,13 +53,14 @@ def get_file_content(filename: str) -> List[str]:
 def ints(string: str) -> List[int]:
     return [int(i) for i in re.findall(r"-?\d+", string)]
 
+
 def floats(string: str) -> List[float]:
     return [float(i) for i in re.findall(r"-?\d+(?:\.\d+)?", string)]
 
 
 class Coord:
     def __init__(self, *args):
-        if len(args) == 1 and isinstance(args[0], tuple):
+        if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 2:
             self.x, self.y = args[0]
         elif len(args) == 2 and all(isinstance(arg, int) for arg in args):
             self.x, self.y = args
@@ -75,6 +76,8 @@ class Coord:
             and all(isinstance(i, int) for i in other)
         ):
             return Coord(self.x + other[0], self.y + other[1])
+        elif isinstance(other, int):
+            return Coord(self.x + other, self.y + other)
         else:
             raise TypeError("Operand must be Coord or tuple of two integers")
 
@@ -126,7 +129,10 @@ class Coord:
 
 class Vector(Coord):
     def __init__(self, *args):
-        super().__init__(*args)
+        if len(args) == 1 and isinstance(args[0], Coord):
+            self.x, self.y = args[0]
+        else:
+            super().__init__(*args)
 
     def manhattan_distance(self) -> int:
         return abs(self.x) + abs(self.y)
@@ -142,6 +148,9 @@ class Vector(Coord):
 
     def __neg__(self) -> "Vector":
         return Vector(-self.x, -self.y)
+
+    def __add__(self, other) -> "Vector":
+        return Vector(super().__add__(other))
 
     @staticmethod
     def all_directions(diagonal=True) -> List["Vector"]:
