@@ -126,6 +126,9 @@ class Coord:
     def __hash__(self):
         return hash((self.x, self.y))
 
+    def __mod__(self, other: "Coord") -> "Coord":
+        return Coord(self.x % other.x, self.y % other.y)
+
 
 class Vector(Coord):
     def __init__(self, *args):
@@ -193,7 +196,7 @@ class Grid:
         return "\n".join(self.grid)
 
     @staticmethod
-    def dots(height: int, width: int) -> "Grid":
+    def dots(width: int, height: int) -> "Grid":
         return Grid(["." * width] * height)
 
     def copy(self):
