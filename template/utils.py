@@ -335,6 +335,52 @@ class Grid:
                 sum += 1
         return sum
 
+    def a_star(
+        self,
+        start_marker: str = "S",
+        goal_marker: str = "E",
+        start: Coord | None = None,
+        goal: Coord | None = None,
+        inpassable: str = "#",
+    ) -> List[Coord]:
+        if start is None:
+            start = self.find(start_marker)
+        if goal is None:
+            goal = self.find(goal_marker)
+        assert start is not None and goal is not None
+
+        directions = Vector.all_directions(diagonal=False)
+        locations: dict[Coord, int] = {start: 0}
+        prev_step: dict[Coord, Coord | None] = {start: None}
+        visited: set[Coord] = set()
+
+        current_location = start
+        while current_location != goal:
+            for direction in directions:
+                new_location = current_location + direction
+                if (
+                    self.is_in_bounds(new_location)
+                    and new_location not in visited
+                    and self[new_location] != inpassable
+                ):
+                    locations[new_location] = locations[current_location] + 1
+                    prev_step[new_location] = current_location
+            visited.add(current_location)
+            del locations[current_location]
+            if not locations:
+                return []
+            current_location = min(
+                locations,
+                key=lambda k: locations[k] + Vector(goal - k).manhattan_distance(),
+            )
+
+        path = []
+        while current_location:
+            path.append(current_location)
+            current_location = prev_step[current_location]
+        path.reverse()
+        return path
+
 
 if __name__ == "__main__":
     fetch_input()
