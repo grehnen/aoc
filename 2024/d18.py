@@ -35,7 +35,7 @@ def solve(grid):
     prev_step: dict[Coord, Coord | None] = {current_location: None}
     visited: set[Coord] = set()
 
-    while current_location != Coord(70, 70):
+    while current_location != goal:
         for direction in directions:
             new_location = current_location + direction
             if (
