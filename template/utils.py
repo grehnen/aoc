@@ -209,7 +209,7 @@ class Grid:
     def count(self, char: str) -> int:
         return sum(row.count(char) for row in self.grid)
 
-    def find(self, string: str) -> Coord | None:
+    def find(self, string: str) -> Coord:
         """
         Returns the first coordinate where the string is found
         """
@@ -217,7 +217,7 @@ class Grid:
             x = row.find(string)
             if x != -1:
                 return Coord(x, y)
-        return None
+        raise ValueError(f"{string} not found")
 
     def find_all(self, string: str) -> List[Coord]:
         """
