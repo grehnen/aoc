@@ -12,9 +12,12 @@ day = int(
 
 directory = os.path.basename(os.path.dirname(__file__))
 year = int(
-    "".join(filter(str.isdigit, directory)) or datetime.today().year
-    if datetime.today().month == 12
-    else datetime.today().year - 1
+    "".join(filter(str.isdigit, directory))
+    or (
+        datetime.today().year
+        if datetime.today().month == 12
+        else datetime.today().year - 1
+    )
 )
 
 file_content: List[str] = fetch_input(day, year)
