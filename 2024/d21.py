@@ -5,9 +5,8 @@ from datetime import datetime
 
 filename = os.path.basename(__file__)
 day = int(
-    "".join(filter(str.isdigit, filename)) or datetime.today().day
-    if datetime.today().day <= 25
-    else 1
+    "".join(filter(str.isdigit, filename))
+    or (datetime.today().day if datetime.today().day <= 25 else 1)
 )
 
 directory = os.path.basename(os.path.dirname(__file__))
