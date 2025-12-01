@@ -21,4 +21,5 @@ year = int(
 
 file_content: List[str] = fetch_input(day, year)
 
-print(file_content)
+for line in file_content:
+    pass
