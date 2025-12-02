@@ -1,12 +1,11 @@
-import os
 from typing import List
 from utils import fetch_input, Grid, Coord
 from datetime import datetime
 from concurrent.futures import as_completed, ProcessPoolExecutor
-import threading
 import multiprocessing
 
 ORIENTATIONS: List[Coord] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+
 
 def test_position_func(test_position, grid2p, start_position):
     grid2p_copy = grid2p.copy()
@@ -44,21 +43,7 @@ def move_one_step(
 
 
 if __name__ == "__main__":
-    filename = os.path.basename(__file__)
-    day = int(
-        "".join(filter(str.isdigit, filename)) or datetime.today().day
-        if datetime.today().day <= 25
-        else 1
-    )
-
-    directory = os.path.basename(os.path.dirname(__file__))
-    year = int(
-        "".join(filter(str.isdigit, directory)) or datetime.today().year
-        if datetime.today().month == 12
-        else datetime.today().year - 1
-    )
-
-    file_content: List[str] = fetch_input(day, year)
+    file_content: List[str] = fetch_input(__file__)
 
     grid = Grid(file_content.copy())
 
@@ -85,7 +70,7 @@ if __name__ == "__main__":
     possible_positions = set()
     grid2[start_position] = "."
 
-    test_positions =  grid2.find_all("X")
+    test_positions = grid2.find_all("X")
 
     for test_position in test_positions:
         position = start_position
@@ -111,7 +96,7 @@ if __name__ == "__main__":
         grid2[test_position] = "."
 
     print(len(possible_positions))
-    print(f'Part 2: {datetime.now() - start_time}')
+    print(f"Part 2: {datetime.now() - start_time}")
 
     # Part 2 (Parallelized)
     start_time = datetime.now()
@@ -123,7 +108,8 @@ if __name__ == "__main__":
 
     with ProcessPoolExecutor(max_workers=multiprocessing.cpu_count()) as executor:
         futures = [
-            executor.submit(test_position_func, pos, grid2p, start_position) for pos in test_positions
+            executor.submit(test_position_func, pos, grid2p, start_position)
+            for pos in test_positions
         ]
         for future in as_completed(futures):
             result = future.result()

@@ -8,21 +8,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def fetch_input(
-    day: int = int(
-        "".join(filter(str.isdigit, os.path.basename(__file__))) or datetime.today().day
-        if datetime.today().day <= 25
-        else 1
-    ),
-    year: int = int(
-        "".join(filter(str.isdigit, os.path.basename(os.path.dirname(__file__))))
-        or datetime.today().year
-        if datetime.today().month == 12
-        else datetime.today().year - 1
-    ),
-) -> List[str]:
-    os.makedirs("input", exist_ok=True)
-    filename = f"input/d{day}.txt"
+def fetch_input(file_path: str) -> List[str]:
+    year, day = get_date(file_path)
+    file_dir = os.path.dirname(os.path.abspath(file_path))
+    input_dir = os.path.join(file_dir, "input")
+    os.makedirs(input_dir, exist_ok=True)
+    filename = os.path.join(input_dir, f"d{day}.txt")
     if os.path.exists(filename):
         print(f"{filename} already exists. Skipping fetch.")
         return get_file_content(filename)
@@ -43,6 +34,25 @@ def fetch_input(
 
     print(f"Content fetched and saved to {filename}")
     return get_file_content(filename)
+
+
+def get_date(file: str) -> tuple[int, int]:
+    filename = os.path.basename(file)
+    day = int(
+        "".join(filter(str.isdigit, filename))
+        or (datetime.today().day if datetime.today().day <= 25 else 1)
+    )
+
+    directory = os.path.basename(os.path.dirname(file))
+    year = int(
+        "".join(filter(str.isdigit, directory))
+        or (
+            datetime.today().year
+            if datetime.today().month == 12
+            else datetime.today().year - 1
+        )
+    )
+    return year, day
 
 
 def get_file_content(filename: str) -> List[str]:
@@ -301,7 +311,7 @@ class Grid:
                 sum += self.get_pattern_count(
                     pattern, wildcard, v_mirror=v_mirror, h_mirror=h_mirror
                 )
-                pattern = list(zip(*pattern[::-1]))
+                pattern = list(zip(*pattern[::-1]))  # type: ignore TODO: fix this
             return sum
 
         if v_mirror:
@@ -383,4 +393,4 @@ class Grid:
 
 
 if __name__ == "__main__":
-    fetch_input()
+    fetch_input(__file__)

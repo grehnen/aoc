@@ -1,24 +1,8 @@
-import os
 from typing import List
 from utils import fetch_input, Grid, Coord, Vector, ints, floats
-from datetime import datetime
 from fractions import Fraction
 
-filename = os.path.basename(__file__)
-day = int(
-    "".join(filter(str.isdigit, filename)) or datetime.today().day
-    if datetime.today().day <= 25
-    else 1
-)
-
-directory = os.path.basename(os.path.dirname(__file__))
-year = int(
-    "".join(filter(str.isdigit, directory)) or datetime.today().year
-    if datetime.today().month == 12
-    else datetime.today().year - 1
-)
-
-file_content: List[str] = fetch_input(day, year)
+file_content: List[str] = fetch_input(__file__)
 
 sumA = 0
 
@@ -66,7 +50,6 @@ for i in range(0, len(file_content), 4):
     b = Vector(*ints(file_content[i + 1]))
     p = Coord(*ints(file_content[i + 2]))
     p += 10000000000000
-
 
     a_k = Fraction(a.y, a.x)
     b_k = Fraction(b.y, b.x)

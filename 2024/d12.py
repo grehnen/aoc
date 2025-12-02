@@ -1,23 +1,7 @@
-import os
 from typing import List
 from utils import fetch_input, Grid, Coord, Vector
-from datetime import datetime
 
-filename = os.path.basename(__file__)
-day = int(
-    "".join(filter(str.isdigit, filename)) or datetime.today().day
-    if datetime.today().day <= 25
-    else 1
-)
-
-directory = os.path.basename(os.path.dirname(__file__))
-year = int(
-    "".join(filter(str.isdigit, directory)) or datetime.today().year
-    if datetime.today().month == 12
-    else datetime.today().year - 1
-)
-
-file_content: List[str] = fetch_input(day, year)
+file_content: List[str] = fetch_input(__file__)
 
 grid = Grid(file_content)
 already_visited: set[Coord] = set()
@@ -66,19 +50,25 @@ for region in regions:
 
 print(sumA)
 
+
 def get_side_neghbors(coord: Coord, direction: Vector, region_coords: set[Coord]):
     perp_a = direction.perpendicular()
     perp_b = -direction.perpendicular()
     side_neighbors = set()
     for perp in (perp_a, perp_b):
         i = 1
-        while coord + perp * i in region_coords and coord + perp * i + direction not in region_coords:
+        while (
+            coord + perp * i in region_coords
+            and coord + perp * i + direction not in region_coords
+        ):
             side_neighbors.add(coord + perp * i)
             i += 1
     return side_neighbors
 
 
-def get_region_directional_side_count(region_coords: set[Coord], direction: Vector) -> int:
+def get_region_directional_side_count(
+    region_coords: set[Coord], direction: Vector
+) -> int:
     side_count = 0
     checked = set()
     for coord in region_coords:
@@ -97,8 +87,9 @@ def get_region_side_count(region_coords: set[Coord]) -> int:
         side_count += get_region_directional_side_count(region_coords, direction)
     return side_count
 
+
 for region in regions:
-    region['side_count'] = get_region_side_count(region["coords"])
+    region["side_count"] = get_region_side_count(region["coords"])
 
 sumB = 0
 for region in regions:

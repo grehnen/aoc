@@ -1,10 +1,7 @@
-import os
 from typing import List
 from utils import fetch_input, Grid
 
-current_day = int("".join(filter(str.isdigit, os.path.basename(__file__))))
-
-file_content: List[str] = fetch_input(current_day)
+file_content: List[str] = fetch_input(__file__)
 
 import re
 

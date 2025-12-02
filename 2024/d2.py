@@ -1,9 +1,6 @@
-import os
 from utils import fetch_input
 
-current_day = int("".join(filter(str.isdigit, os.path.basename(__file__))))
-
-file_content = fetch_input(current_day)
+file_content = fetch_input(__file__)
 
 count = 0
 for line in file_content:
