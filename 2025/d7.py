@@ -39,10 +39,10 @@ def solve_1(grid: Grid, start):
         cell = grid[pos]
         if cell == "^":
             count += 1
-            if pos + LEFT not in already_checked:
-                to_check.add(pos + LEFT)
-            if pos + RIGHT not in already_checked:
-                to_check.add(pos + RIGHT)
+            checkable = {pos + LEFT, pos + RIGHT}
+            checkable.difference_update(already_checked)
+            for c in checkable:
+                to_check.add(c)
         elif pos + DOWN not in already_checked:
             to_check.add(pos + DOWN)
         already_checked.update(to_check)
