@@ -204,18 +204,22 @@ class Grid:
 
     def __getitem__(self, pos: Coord):
         x, y = pos
-        if not self.is_in_bounds(pos):
+        if not pos in self:
             raise IndexError("Out of bounds")
         return self.grid[y][x]
 
     def __setitem__(self, pos: Coord, value):
         x, y = pos
-        if not self.is_in_bounds(pos):
+        if not pos in self:
             raise IndexError("Out of bounds")
         self.grid[y] = self.grid[y][:x] + value + self.grid[y][x + 1 :]
 
     def __str__(self):
         return "\n".join(self.grid)
+
+    def __contains__(self, pos: Coord) -> bool:
+        x, y = pos
+        return 0 <= x < self.width and 0 <= y < self.height
 
     @staticmethod
     def dots(width: int, height: int) -> "Grid":
@@ -225,8 +229,7 @@ class Grid:
         return Grid(self.grid.copy())
 
     def is_in_bounds(self, pos: Coord) -> bool:
-        x, y = pos
-        return 0 <= x < self.width and 0 <= y < self.height
+        return pos in self
 
     def count(self, char: str) -> int:
         return sum(row.count(char) for row in self.grid)

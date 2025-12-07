@@ -34,7 +34,7 @@ def solve_1(grid: Grid, start):
     already_checked = set()
     while to_check:
         pos = to_check.pop()
-        if not grid.is_in_bounds(pos):
+        if pos not in grid:
             continue
         cell = grid[pos]
         if cell == "^":
