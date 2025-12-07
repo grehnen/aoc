@@ -23,9 +23,9 @@ example = [
     "...............",
 ]
 
-RIGHT = Vector(1, 0)
-LEFT = Vector(-1, 0)
-DOWN = Vector(0, 1)
+RIGHT = Vector.RIGHT
+LEFT = Vector.LEFT
+DOWN = Vector.DOWN
 
 
 def solve_1(grid: Grid, start):

@@ -141,6 +141,11 @@ class Coord:
 
 
 class Vector(Coord):
+    RIGHT: "Vector"
+    LEFT: "Vector"
+    DOWN: "Vector"
+    UP: "Vector"
+
     def __init__(self, *args):
         if len(args) == 1 and isinstance(args[0], Coord):
             self.x, self.y = args[0]
@@ -171,6 +176,13 @@ class Vector(Coord):
         if diagonal:
             directions += [Vector(1, 1), Vector(-1, -1), Vector(1, -1), Vector(-1, 1)]
         return directions
+
+
+# Note: These assumes origo at top-left corner, x increases to the right, y increases downwards.
+Vector.RIGHT = Vector(1, 0)
+Vector.LEFT = Vector(-1, 0)
+Vector.DOWN = Vector(0, 1)
+Vector.UP = Vector(0, -1)
 
 
 class Grid:
