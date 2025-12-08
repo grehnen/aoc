@@ -68,6 +68,13 @@ def floats(string: str) -> List[float]:
     return [float(i) for i in re.findall(r"-?\d+(?:\.\d+)?", string)]
 
 
+def prod(iterable):
+    result = 1
+    for x in iterable:
+        result *= x
+    return result
+
+
 class Coord:
     def __init__(self, *args):
         if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 2:
@@ -140,6 +147,34 @@ class Coord:
         return Coord(self.x % other.x, self.y % other.y)
 
 
+class Coord3:
+    def __init__(self, *args):
+        if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 3:
+            self.x, self.y, self.z = args[0]
+        elif len(args) == 3 and all(isinstance(arg, int) for arg in args):
+            self.x, self.y, self.z = args
+        else:
+            raise TypeError("Coord3() takes either a tuple or three integer arguments")
+
+    def __sub__(self, other) -> "Coord3":
+        if isinstance(other, Coord3):
+            return Coord3(self.x - other.x, self.y - other.y, self.z - other.z)
+        elif (
+            isinstance(other, tuple)
+            and len(other) == 3
+            and all(isinstance(i, int) for i in other)
+        ):
+            return Coord3(self.x - other[0], self.y - other[1], self.z - other[2])
+        else:
+            raise TypeError("Operand must be Coord3 or tuple of three integers")
+
+    def __iter__(self):
+        return iter((self.x, self.y, self.z))
+
+    def __repr__(self) -> str:
+        return f"({self.x}, {self.y}, {self.z})"
+
+
 class Vector(Coord):
     RIGHT: "Vector"
     LEFT: "Vector"
@@ -174,7 +209,12 @@ class Vector(Coord):
     def all_directions(diagonal=True) -> List["Vector"]:
         directions = [Vector(0, 1), Vector(1, 0), Vector(0, -1), Vector(-1, 0)]
         if diagonal:
-            directions += [Vector(1, 1), Vector(-1, -1), Vector(1, -1), Vector(-1, 1)]
+            directions += [
+                Vector(1, 1),
+                Vector(-1, -1),
+                Vector(1, -1),
+                Vector(-1, 1),
+            ]
         return directions
 
 
@@ -183,6 +223,17 @@ Vector.RIGHT = Vector(1, 0)
 Vector.LEFT = Vector(-1, 0)
 Vector.DOWN = Vector(0, 1)
 Vector.UP = Vector(0, -1)
+
+
+class Vector3(Coord3):
+    def __init__(self, *args):
+        if len(args) == 1 and isinstance(args[0], Coord3):
+            self.x, self.y, self.z = args[0]
+        else:
+            super().__init__(*args)
+
+    def euclidean_distance(self) -> float:
+        return (self.x**2 + self.y**2 + self.z**2) ** 0.5
 
 
 class Grid:
