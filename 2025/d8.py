@@ -29,7 +29,6 @@ ITERATIONS = 1_000
 
 def solve(
     all_coords: List[Coord3],
-    part_2=False,
 ):
     all_distances: List[float] = []
     distance_dict: dict[float, tuple[Coord3, Coord3]] = {}
@@ -43,7 +42,9 @@ def solve(
     all_distances.sort()
 
     clusters: List[Set[Coord3]] = []
-    for distance in all_distances[: None if part_2 else ITERATIONS]:
+    answer_1 = None
+    answer_2 = None
+    for j, distance in enumerate(all_distances):
         coord_a, coord_b = distance_dict[distance]
         first_cluster_index = None
         for i, cluster in enumerate(clusters):
@@ -62,14 +63,19 @@ def solve(
                     break
         if first_cluster_index is None:
             clusters.append({coord_a, coord_b})
-        if part_2 and len(clusters) == 1 and len(clusters[0]) == len(all_coords):
-            return coord_a.x * coord_b.x
-    clusters.sort(key=len, reverse=True)
-    return prod(len(cluster) for cluster in clusters[:3])
+        
+        if j == ITERATIONS - 1:
+            clusters.sort(key=len, reverse=True)
+            answer_1 = prod(len(cluster) for cluster in clusters[:3])
+        
+        if len(clusters) == 1 and len(clusters[0]) == len(all_coords):
+            answer_2 = coord_a.x * coord_b.x
+        
+        if answer_1 and answer_2:
+            return answer_1, answer_2
 
 
 if __name__ == "__main__":
     all_coords = [Coord3(tuple(ints(line))) for line in file_content]
 
     print(solve(all_coords))
-    print(solve(all_coords, part_2=True))
