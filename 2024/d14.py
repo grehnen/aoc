@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
 file_content: List[str] = fetch_input(__file__)
 
@@ -12,8 +12,8 @@ for line in file_content:
     x, y, vx, vy = ints(line)
     robots.append(
         {
-            "position": Coord(x, y),
-            "velocity": Vector(vx, vy),
+            "position": Coord2(x, y),
+            "velocity": Vector2(vx, vy),
         }
     )
 
@@ -36,7 +36,7 @@ def print_grid(robots: List[dict], width: int, height: int, second):
 for second in range(1, SECONDS):
     for robot in robots:
         robot["position"] += robot["velocity"]
-        robot["position"] = robot["position"] % Coord(WIDTH, HEIGHT)
+        robot["position"] = robot["position"] % Coord2(WIDTH, HEIGHT)
     print_grid(robots, WIDTH, HEIGHT, second)
     if second == 100:
         for robot in robots:

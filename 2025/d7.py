@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 from functools import cache
 
 file_content: List[str] = fetch_input(__file__)
@@ -23,9 +23,9 @@ example = [
     "...............",
 ]
 
-RIGHT = Vector.RIGHT
-LEFT = Vector.LEFT
-DOWN = Vector.DOWN
+RIGHT = Vector2.RIGHT
+LEFT = Vector2.LEFT
+DOWN = Vector2.DOWN
 
 
 def solve_1(grid: Grid, start):
@@ -51,7 +51,7 @@ def solve_1(grid: Grid, start):
 
 
 @cache
-def solve_2(grid: Grid, position: Coord) -> int:
+def solve_2(grid: Grid, position: Coord2) -> int:
     if position.y >= grid.height:
         return 1
     if grid[position] == "^":

@@ -1,6 +1,6 @@
 from collections import defaultdict
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
 file_content: List[str] = fetch_input(__file__)
 towels: dict[int, set[str]] = defaultdict(set)

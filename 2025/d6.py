@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 import numpy as np
 
 file_content: List[str] = fetch_input(__file__)

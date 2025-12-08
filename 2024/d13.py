@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 from fractions import Fraction
 
 file_content: List[str] = fetch_input(__file__)
@@ -7,9 +7,9 @@ file_content: List[str] = fetch_input(__file__)
 sumA = 0
 
 for i in range(0, len(file_content), 4):
-    a = Vector(*ints(file_content[i]))
-    b = Vector(*ints(file_content[i + 1]))
-    p = Vector(*ints(file_content[i + 2]))
+    a = Vector2(*ints(file_content[i]))
+    b = Vector2(*ints(file_content[i + 1]))
+    p = Vector2(*ints(file_content[i + 2]))
 
     p_quote = p.x / p.y
     a_quote = a.x / a.y
@@ -46,9 +46,9 @@ print(sumA)
 
 sumB = 0
 for i in range(0, len(file_content), 4):
-    a = Vector(*ints(file_content[i]))
-    b = Vector(*ints(file_content[i + 1]))
-    p = Coord(*ints(file_content[i + 2]))
+    a = Vector2(*ints(file_content[i]))
+    b = Vector2(*ints(file_content[i + 1]))
+    p = Coord2(*ints(file_content[i + 2]))
     p += 10000000000000
 
     a_k = Fraction(a.y, a.x)

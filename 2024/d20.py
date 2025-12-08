@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 from datetime import datetime
 
 file_content: List[str] = fetch_input(__file__)
@@ -11,7 +11,7 @@ path = grid.a_star()
 path_dict = {coord: i for i, coord in enumerate(path)}
 sum_a = 0
 for coord in grid.a_star():
-    for direction in Vector.all_directions(diagonal=False):
+    for direction in Vector2.all_directions(diagonal=False):
         direction *= 2
         new_location = coord + direction
         if (
@@ -29,11 +29,11 @@ sum_b = 0
 start = datetime.now()
 for i, coord_a in enumerate(path):
     for coord_b in path[i + TIME_SAVE_LIMIT :]:
-        vector = Vector(coord_b - coord_a)
+        vector = Vector2(coord_b - coord_a)
         if (
-            vector.manhattan_distance() <= CHEAT_LIMIT
+            Vector2.manhattan_distance() <= CHEAT_LIMIT
             and path_dict[coord_b]
-            >= path_dict[coord_a] + TIME_SAVE_LIMIT + vector.manhattan_distance()
+            >= path_dict[coord_a] + TIME_SAVE_LIMIT + Vector2.manhattan_distance()
         ):
             sum_b += 1
 

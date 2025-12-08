@@ -1,17 +1,17 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector
+from utils import fetch_input, Grid, Coord2, Vector2
 
 file_content: List[str] = fetch_input(__file__)
 
 grid = Grid(file_content)
-already_visited: set[Coord] = set()
+already_visited: set[Coord2] = set()
 
 
 def get_recursive_neighbors(
-    coord: Coord, visited: set[Coord], perimeter
-) -> tuple[set[Coord], set[Coord], int]:
+    coord: Coord2, visited: set[Coord2], perimeter
+) -> tuple[set[Coord2], set[Coord2], int]:
     visited.add(coord)
-    neighbors: set[Coord] = set()
+    neighbors: set[Coord2] = set()
     for neighbor in grid.neighbors(coord, diagonal=False, include_out_of_bounds=True):
         if neighbor in visited:
             continue
@@ -26,7 +26,7 @@ def get_recursive_neighbors(
     return neighbors, visited, perimeter
 
 
-def get_region(coord: Coord) -> dict:
+def get_region(coord: Coord2) -> dict:
     region = {"coords": set(), "perimeter": 0}
     region["coords"], visited, region["perimeter"] = get_recursive_neighbors(
         coord, set(), 0
@@ -39,7 +39,7 @@ def get_region(coord: Coord) -> dict:
 regions = []
 for i, line in enumerate(grid.grid):
     for j, char in enumerate(line):
-        coord = Coord(i, j)
+        coord = Coord2(i, j)
         if coord in already_visited:
             continue
         regions.append(get_region(coord))
@@ -51,7 +51,7 @@ for region in regions:
 print(sumA)
 
 
-def get_side_neghbors(coord: Coord, direction: Vector, region_coords: set[Coord]):
+def get_side_neghbors(coord: Coord2, direction: Vector2, region_coords: set[Coord2]):
     perp_a = direction.perpendicular()
     perp_b = -direction.perpendicular()
     side_neighbors = set()
@@ -67,7 +67,7 @@ def get_side_neghbors(coord: Coord, direction: Vector, region_coords: set[Coord]
 
 
 def get_region_directional_side_count(
-    region_coords: set[Coord], direction: Vector
+    region_coords: set[Coord2], direction: Vector2
 ) -> int:
     side_count = 0
     checked = set()
@@ -81,9 +81,9 @@ def get_region_directional_side_count(
     return side_count
 
 
-def get_region_side_count(region_coords: set[Coord]) -> int:
+def get_region_side_count(region_coords: set[Coord2]) -> int:
     side_count = 0
-    for direction in Vector.all_directions(diagonal=False):
+    for direction in Vector2.all_directions(diagonal=False):
         side_count += get_region_directional_side_count(region_coords, direction)
     return side_count
 

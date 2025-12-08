@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
 file_content: List[str] = fetch_input(__file__)
 
@@ -9,10 +9,10 @@ grid = Grid(file_content[:split_index])
 moves = "".join(file_content[split_index + 1 :])
 
 directions = {
-    "^": Vector(0, -1),
-    "v": Vector(0, 1),
-    "<": Vector(-1, 0),
-    ">": Vector(1, 0),
+    "^": Vector2(0, -1),
+    "v": Vector2(0, 1),
+    "<": Vector2(-1, 0),
+    ">": Vector2(1, 0),
 }
 
 for move in moves:

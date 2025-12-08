@@ -1,5 +1,5 @@
 from typing import List, Set
-from utils import Coord3, fetch_input, Grid, Coord, Vector, ints, floats, Vector3, prod
+from utils import Coord3, fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, prod
 
 file_content: List[str] = fetch_input(__file__)
 examples = [
@@ -35,7 +35,7 @@ def solve(
     for i, coord_a in enumerate(all_coords):
         for coord_b in all_coords[i + 1 :]:
             vector = Vector3(coord_b - coord_a)
-            distance = vector.euclidean_distance()
+            distance = Vector2.euclidean_distance()
             all_distances.append(distance)
             distance_dict[distance] = (coord_a, coord_b)
 

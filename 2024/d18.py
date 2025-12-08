@@ -1,22 +1,22 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
 file_content: List[str] = fetch_input(__file__)
 
 grid = Grid.dots(71, 71)
 
 for i in range(1024):
-    coord = Coord(tuple(ints(file_content[i])))
+    coord = Coord2(tuple(ints(file_content[i])))
     grid[coord] = "#"
 
 
 def solve(grid):
-    current_location = Coord(0, 0)
-    goal = Coord(70, 70)
-    directions = Vector.all_directions(diagonal=False)
-    locations: dict[Coord, int] = {current_location: 0}
-    prev_step: dict[Coord, Coord | None] = {current_location: None}
-    visited: set[Coord] = set()
+    current_location = Coord2(0, 0)
+    goal = Coord2(70, 70)
+    directions = Vector2.all_directions(diagonal=False)
+    locations: dict[Coord2, int] = {current_location: 0}
+    prev_step: dict[Coord2, Coord2 | None] = {current_location: None}
+    visited: set[Coord2] = set()
 
     while current_location != goal:
         for direction in directions:
@@ -34,9 +34,9 @@ def solve(grid):
             return None
         current_location = min(
             locations,
-            key=lambda k: locations[k] + Vector(goal - k).manhattan_distance(),
+            key=lambda k: locations[k] + Vector2(goal - k).manhattan_distance(),
         )
-    path: set[Coord] = set()
+    path: set[Coord2] = set()
     back_track = goal
     while back_track:
         path.add(back_track)
@@ -51,7 +51,7 @@ if path_a:
 i = 1024
 path_b = path_a or {}
 while True:
-    coord = Coord(tuple(ints(file_content[i])))
+    coord = Coord2(tuple(ints(file_content[i])))
     grid[coord] = "#"
     if coord in path_b:
         path_b = solve(grid)
@@ -61,4 +61,4 @@ while True:
 
 
 print(grid)
-print(Coord(tuple(ints(file_content[i]))))
+print(Coord2(tuple(ints(file_content[i]))))

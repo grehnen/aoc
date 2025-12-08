@@ -75,46 +75,46 @@ def prod(iterable):
     return result
 
 
-class Coord:
+class Coord2:
     def __init__(self, *args):
         if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 2:
             self.x, self.y = args[0]
         elif len(args) == 2 and all(isinstance(arg, int) for arg in args):
             self.x, self.y = args
         else:
-            raise TypeError("Coord() takes either a tuple or two integer arguments")
+            raise TypeError("Coord2() takes either a tuple or two integer arguments")
 
-    def __add__(self, other) -> "Coord":
-        if isinstance(other, Coord):
-            return Coord(self.x + other.x, self.y + other.y)
+    def __add__(self, other) -> "Coord2":
+        if isinstance(other, Coord2):
+            return Coord2(self.x + other.x, self.y + other.y)
         elif (
             isinstance(other, tuple)
             and len(other) == 2
             and all(isinstance(i, int) for i in other)
         ):
-            return Coord(self.x + other[0], self.y + other[1])
+            return Coord2(self.x + other[0], self.y + other[1])
         elif isinstance(other, int):
-            return Coord(self.x + other, self.y + other)
+            return Coord2(self.x + other, self.y + other)
         else:
-            raise TypeError("Operand must be Coord or tuple of two integers")
+            raise TypeError("Operand must be Coord2 or tuple of two integers")
 
-    def __sub__(self, other) -> "Coord":
-        if isinstance(other, Coord):
-            return Coord(self.x - other.x, self.y - other.y)
+    def __sub__(self, other) -> "Coord2":
+        if isinstance(other, Coord2):
+            return Coord2(self.x - other.x, self.y - other.y)
         elif (
             isinstance(other, tuple)
             and len(other) == 2
             and all(isinstance(i, int) for i in other)
         ):
-            return Coord(self.x - other[0], self.y - other[1])
+            return Coord2(self.x - other[0], self.y - other[1])
         else:
-            raise TypeError("Operand must be Coord or tuple of two integers")
+            raise TypeError("Operand must be Coord2 or tuple of two integers")
 
-    def __mul__(self, other: int) -> "Coord":
-        return Coord(self.x * other, self.y * other)
+    def __mul__(self, other: int) -> "Coord2":
+        return Coord2(self.x * other, self.y * other)
 
     def __eq__(self, other: object) -> bool:
-        if isinstance(other, Coord):
+        if isinstance(other, Coord2):
             return self.x == other.x and self.y == other.y
         elif isinstance(other, tuple):
             return self.x == other[0] and self.y == other[1]
@@ -143,8 +143,8 @@ class Coord:
     def __hash__(self):
         return hash((self.x, self.y))
 
-    def __mod__(self, other: "Coord") -> "Coord":
-        return Coord(self.x % other.x, self.y % other.y)
+    def __mod__(self, other: "Coord2") -> "Coord2":
+        return Coord2(self.x % other.x, self.y % other.y)
 
 
 class Coord3:
@@ -175,14 +175,16 @@ class Coord3:
         return f"({self.x}, {self.y}, {self.z})"
 
 
-class Vector(Coord):
-    RIGHT: "Vector"
-    LEFT: "Vector"
-    DOWN: "Vector"
-    UP: "Vector"
+
+
+class Vector2(Coord2):
+    RIGHT: "Vector2"
+    LEFT: "Vector2"
+    DOWN: "Vector2"
+    UP: "Vector2"
 
     def __init__(self, *args):
-        if len(args) == 1 and isinstance(args[0], Coord):
+        if len(args) == 1 and isinstance(args[0], Coord2):
             self.x, self.y = args[0]
         else:
             super().__init__(*args)
@@ -196,33 +198,33 @@ class Vector(Coord):
     def euclidean_distance(self) -> float:
         return (self.x**2 + self.y**2) ** 0.5
 
-    def perpendicular(self) -> "Vector":
-        return Vector(self.y, -self.x)
+    def perpendicular(self) -> "Vector2":
+        return Vector2(self.y, -self.x)
 
-    def __neg__(self) -> "Vector":
-        return Vector(-self.x, -self.y)
+    def __neg__(self) -> "Vector2":
+        return Vector2(-self.x, -self.y)
 
-    def __add__(self, other) -> "Vector":
-        return Vector(super().__add__(other))
+    def __add__(self, other) -> "Vector2":
+        return Vector2(super().__add__(other))
 
     @staticmethod
-    def all_directions(diagonal=True) -> List["Vector"]:
-        directions = [Vector(0, 1), Vector(1, 0), Vector(0, -1), Vector(-1, 0)]
+    def all_directions(diagonal=True) -> List["Vector2"]:
+        directions = [Vector2(0, 1), Vector2(1, 0), Vector2(0, -1), Vector2(-1, 0)]
         if diagonal:
             directions += [
-                Vector(1, 1),
-                Vector(-1, -1),
-                Vector(1, -1),
-                Vector(-1, 1),
+                Vector2(1, 1),
+                Vector2(-1, -1),
+                Vector2(1, -1),
+                Vector2(-1, 1),
             ]
         return directions
 
 
 # Note: These assumes origo at top-left corner, x increases to the right, y increases downwards.
-Vector.RIGHT = Vector(1, 0)
-Vector.LEFT = Vector(-1, 0)
-Vector.DOWN = Vector(0, 1)
-Vector.UP = Vector(0, -1)
+Vector2.RIGHT = Vector2(1, 0)
+Vector2.LEFT = Vector2(-1, 0)
+Vector2.DOWN = Vector2(0, 1)
+Vector2.UP = Vector2(0, -1)
 
 
 class Vector3(Coord3):
@@ -253,13 +255,13 @@ class Grid:
         self.height = len(grid)
         self.width = len(grid[0])
 
-    def __getitem__(self, pos: Coord):
+    def __getitem__(self, pos: Coord2):
         x, y = pos
         if not pos in self:
             raise IndexError("Out of bounds")
         return self.grid[y][x]
 
-    def __setitem__(self, pos: Coord, value):
+    def __setitem__(self, pos: Coord2, value):
         x, y = pos
         if not pos in self:
             raise IndexError("Out of bounds")
@@ -268,7 +270,7 @@ class Grid:
     def __str__(self):
         return "\n".join(self.grid)
 
-    def __contains__(self, pos: Coord) -> bool:
+    def __contains__(self, pos: Coord2) -> bool:
         x, y = pos
         return 0 <= x < self.width and 0 <= y < self.height
 
@@ -279,23 +281,23 @@ class Grid:
     def copy(self):
         return Grid(self.grid.copy())
 
-    def is_in_bounds(self, pos: Coord) -> bool:
+    def is_in_bounds(self, pos: Coord2) -> bool:
         return pos in self
 
     def count(self, char: str) -> int:
         return sum(row.count(char) for row in self.grid)
 
-    def find(self, string: str) -> Coord:
+    def find(self, string: str) -> Coord2:
         """
         Returns the first coordinate where the string is found
         """
         for y, row in enumerate(self.grid):
             x = row.find(string)
             if x != -1:
-                return Coord(x, y)
+                return Coord2(x, y)
         raise ValueError(f"{string} not found")
 
-    def find_all(self, string: str) -> List[Coord]:
+    def find_all(self, string: str) -> List[Coord2]:
         """
         Returns a list of all coordinates where the string is found
         """
@@ -303,7 +305,7 @@ class Grid:
         for y, row in enumerate(self.grid):
             x = row.find(string)
             while x != -1:
-                coords.append(Coord(x, y))
+                coords.append(Coord2(x, y))
                 x = row.find(string, x + 1)
         return coords
 
@@ -312,15 +314,20 @@ class Grid:
         for char in ignore:
             char_set.remove(char)
         return char_set
+    
+    def transposed(self) -> "Grid":
+        transposed_grid = ["".join(row[i] for row in self.grid) for i in range(self.width)]
+        return Grid(transposed_grid)
+    
 
     def neighbors(
         self,
-        pos: Coord,
+        pos: Coord2,
         diagonal=True,
         distance=1,
         include_self=False,
         include_out_of_bounds=False,
-    ) -> List[Coord]:
+    ) -> List[Coord2]:
         x, y = pos
         offsets = [
             (dx, dy)
@@ -331,13 +338,13 @@ class Grid:
         if not diagonal:
             offsets = [(dx, dy) for dx, dy in offsets if dx == 0 or dy == 0]
         return [
-            Coord(x + dx, y + dy)
+            Coord2(x + dx, y + dy)
             for dx, dy in offsets
-            if self.is_in_bounds(Coord(x + dx, y + dy)) or include_out_of_bounds
+            if self.is_in_bounds(Coord2(x + dx, y + dy)) or include_out_of_bounds
         ]
 
     def neighbor_values(
-        self, pos: Coord, diagonal=True, distance=1, include_self=False
+        self, pos: Coord2, diagonal=True, distance=1, include_self=False
     ) -> List[str]:
         return [
             self[coord]
@@ -354,8 +361,8 @@ class Grid:
                 for i in range(1, len(word)):
                     x, y = coord
                     if not (
-                        self.is_in_bounds(Coord(x + i * dx, y + i * dy))
-                        and self[Coord(x + i * dx, y + i * dy)] == word[i]
+                        self.is_in_bounds(Coord2(x + i * dx, y + i * dy))
+                        and self[Coord2(x + i * dx, y + i * dy)] == word[i]
                     ):
                         valid = False
                         break
@@ -400,8 +407,8 @@ class Grid:
                     if pattern_char == wildcard:
                         continue
                     elif not (
-                        self.is_in_bounds(Coord(x + dx, y + dy))
-                        and self[Coord(x + dx, y + dy)] == pattern_char
+                        self.is_in_bounds(Coord2(x + dx, y + dy))
+                        and self[Coord2(x + dx, y + dy)] == pattern_char
                     ):
                         valid = False
                         break
@@ -415,20 +422,20 @@ class Grid:
         self,
         start_marker: str = "S",
         goal_marker: str = "E",
-        start: Coord | None = None,
-        goal: Coord | None = None,
+        start: Coord2 | None = None,
+        goal: Coord2 | None = None,
         inpassable: str = "#",
-    ) -> List[Coord]:
+    ) -> List[Coord2]:
         if start is None:
             start = self.find(start_marker)
         if goal is None:
             goal = self.find(goal_marker)
         assert start is not None and goal is not None
 
-        directions = Vector.all_directions(diagonal=False)
-        locations: dict[Coord, int] = {start: 0}
-        prev_step: dict[Coord, Coord | None] = {start: None}
-        visited: set[Coord] = set()
+        directions = Vector2.all_directions(diagonal=False)
+        locations: dict[Coord2, int] = {start: 0}
+        prev_step: dict[Coord2, Coord2 | None] = {start: None}
+        visited: set[Coord2] = set()
 
         current_location = start
         while current_location != goal:
@@ -447,7 +454,7 @@ class Grid:
                 return []
             current_location = min(
                 locations,
-                key=lambda k: locations[k] + Vector(goal - k).manhattan_distance(),
+                key=lambda k: locations[k] + Vector2(goal - k).manhattan_distance(),
             )
 
         path = []

@@ -1,10 +1,10 @@
 from typing import List
-from utils import fetch_input, Grid, Coord
+from utils import fetch_input, Grid, Coord2
 from datetime import datetime
 from concurrent.futures import as_completed, ProcessPoolExecutor
 import multiprocessing
 
-ORIENTATIONS: List[Coord] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+ORIENTATIONS: List[Coord2] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
 
 def test_position_func(test_position, grid2p, start_position):
@@ -28,13 +28,13 @@ def test_position_func(test_position, grid2p, start_position):
     return None
 
 
-def next_orientation(orientation: Coord) -> Coord:
-    return Coord(ORIENTATIONS[(ORIENTATIONS.index(orientation) + 1) % 4])
+def next_orientation(orientation: Coord2) -> Coord2:
+    return Coord2(ORIENTATIONS[(ORIENTATIONS.index(orientation) + 1) % 4])
 
 
 def move_one_step(
-    grid: Grid, current: Coord, orientation: Coord
-) -> tuple[Coord, Coord]:
+    grid: Grid, current: Coord2, orientation: Coord2
+) -> tuple[Coord2, Coord2]:
     while True:
         forward_position = current + orientation
         if not grid.is_in_bounds(forward_position) or grid[forward_position] != "#":

@@ -1,21 +1,21 @@
 from typing import List
-from utils import fetch_input, Grid, Coord, Vector, ints, floats
+from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
 file_content: List[str] = fetch_input(__file__)
 
 grid = Grid(file_content)
 
-DIRECTIONS = Vector.all_directions(False)
+DIRECTIONS = Vector2.all_directions(False)
 STEP = 1
 TURN = 1000
 
 start_loc = grid.find("S")
-start_dir = Vector(1, 0)
+start_dir = Vector2(1, 0)
 reindeer = (start_loc, start_dir)
 finish = grid.find("E")
 
-costs: dict[tuple[Coord, Vector], int] = {(start_loc, start_dir): 0}
-visited: set[tuple[Coord, Vector]] = set()
+costs: dict[tuple[Coord2, Vector2], int] = {(start_loc, start_dir): 0}
+visited: set[tuple[Coord2, Vector2]] = set()
 
 
 while reindeer[0] != finish:
