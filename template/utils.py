@@ -2,7 +2,7 @@ import os
 import requests
 import re
 from datetime import datetime
-from typing import List
+from typing import List, Set
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -146,6 +146,39 @@ class Coord2:
     def __mod__(self, other: "Coord2") -> "Coord2":
         return Coord2(self.x % other.x, self.y % other.y)
 
+    def get_line_to(self, other: "Coord2", overstep=0) -> List["Coord2"]:
+        if self.x == other.x:
+            step = 1 if self.y < other.y else -1
+            start_point = self.y - overstep * step
+            end_point = other.y + overstep * step
+            return [Coord2(self.x, y) for y in range(start_point, end_point, step)]
+        elif self.y == other.y:
+            step = 1 if self.x < other.x else -1
+            start_point = self.x - overstep * step
+            end_point = other.x + overstep * step
+            return [Coord2(x, self.y) for x in range(start_point, end_point, step)]
+        else:
+            raise ValueError("Only horizontal or vertical lines are supported")
+        
+    def get_neighbors(
+        self, diagonal=True
+    ) -> Set["Coord2"]:
+        neighbors: Set[Coord2] = set()
+        for v in Vector2.all_directions(diagonal):
+            neighbors.add(self + v)
+        return neighbors
+    
+    def is_inside_square(
+        self, corner_1: "Coord2", corner_2: "Coord2", include_border: bool
+    ) -> bool:
+        min_x: int = min(corner_1.x, corner_2.x)
+        max_x: int = max(corner_1.x, corner_2.x)
+        min_y: int = min(corner_1.y, corner_2.y)
+        max_y: int = max(corner_1.y, corner_2.y)
+        if include_border:
+            return (min_x <= self.x <= max_x) and (min_y <= self.y <= max_y)
+        return (min_x < self.x < max_x) and (min_y < self.y < max_y)
+
 
 class Coord3:
     def __init__(self, *args):
@@ -173,8 +206,6 @@ class Coord3:
 
     def __repr__(self) -> str:
         return f"({self.x}, {self.y}, {self.z})"
-
-
 
 
 class Vector2(Coord2):
@@ -314,11 +345,12 @@ class Grid:
         for char in ignore:
             char_set.remove(char)
         return char_set
-    
+
     def transposed(self) -> "Grid":
-        transposed_grid = ["".join(row[i] for row in self.grid) for i in range(self.width)]
+        transposed_grid = [
+            "".join(row[i] for row in self.grid) for i in range(self.width)
+        ]
         return Grid(transposed_grid)
-    
 
     def neighbors(
         self,
