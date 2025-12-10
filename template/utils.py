@@ -159,7 +159,7 @@ class Coord2:
             return [Coord2(x, self.y) for x in range(start_point, end_point, step)]
         else:
             raise ValueError("Only horizontal or vertical lines are supported")
-        
+
     def get_neighbors(
         self, diagonal=True
     ) -> Set["Coord2"]:
@@ -167,7 +167,7 @@ class Coord2:
         for v in Vector2.all_directions(diagonal):
             neighbors.add(self + v)
         return neighbors
-    
+
     def is_inside_square(
         self, corner_1: "Coord2", corner_2: "Coord2", include_border: bool
     ) -> bool:
