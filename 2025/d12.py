@@ -6,11 +6,8 @@ def solve_1(shapes: List[Grid], regions: List[Tuple[int, int, List[int]]]):
     count = 0
     for region in regions:
         x_size, y_size, shape_counts = region
-        all_shapes: List[Grid] = []
-        for i in range(6):
-            all_shapes.extend([shapes[i]] * shape_counts[i])
 
-        if sum([x.count("#") for x in all_shapes]) < x_size * y_size:
+        if sum(x.count("#") * shape_counts[i] for i, x in enumerate(shapes)) < x_size * y_size:
             count += 1
 
     return count
