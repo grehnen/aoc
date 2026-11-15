@@ -1,5 +1,6 @@
 import os
 import re
+from collections.abc import Iterable, Iterator, Sequence
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -74,13 +75,19 @@ def floats(string: str) -> list[float]:
 
 
 class Coord2:
-    def __init__(self, *args):
+    def __init__(self, *args: int | tuple[int, int]):
         if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 2:
-            self.x, self.y = args[0]
-        elif len(args) == 2 and all(isinstance(arg, int) for arg in args):
-            self.x, self.y = args
+            x, y = args[0]
+        elif len(args) == 2:
+            x, y = args
         else:
             raise TypeError("Coord2() takes either a tuple or two integer arguments")
+
+        if not (isinstance(x, int) and isinstance(y, int)):
+            raise TypeError("Coord2() takes either a tuple or two integer arguments")
+
+        self.x: int = x
+        self.y: int = y
 
     def __add__(self, other) -> "Coord2":
         if isinstance(other, Coord2):
@@ -174,16 +181,24 @@ class Coord2:
         if include_border:
             return (min_x <= self.x <= max_x) and (min_y <= self.y <= max_y)
         return (min_x < self.x < max_x) and (min_y < self.y < max_y)
+    
 
 
 class Coord3:
-    def __init__(self, *args):
+    def __init__(self, *args: int | tuple[int, int, int]):
         if len(args) == 1 and isinstance(args[0], tuple) and len(args[0]) == 3:
-            self.x, self.y, self.z = args[0]
-        elif len(args) == 3 and all(isinstance(arg, int) for arg in args):
-            self.x, self.y, self.z = args
+            x, y, z = args[0]
+        elif len(args) == 3:
+            x, y, z = args
         else:
             raise TypeError("Coord3() takes either a tuple or three integer arguments")
+
+        if not (isinstance(x, int) and isinstance(y, int) and isinstance(z, int)):
+            raise TypeError("Coord3() takes either a tuple or three integer arguments")
+
+        self.x: int = x
+        self.y: int = y
+        self.z: int = z
 
     def __sub__(self, other) -> "Coord3":
         if isinstance(other, Coord3):
@@ -210,11 +225,15 @@ class Vector2(Coord2):
     DOWN: "Vector2"
     UP: "Vector2"
 
-    def __init__(self, *args):
+    def __init__(self, *args: int | tuple[int, int] | Coord2):
         if len(args) == 1 and isinstance(args[0], Coord2):
             self.x, self.y = args[0]
+        elif len(args) == 1 and isinstance(args[0], tuple):
+            super().__init__(args[0])
+        elif len(args) == 2 and isinstance(args[0], int) and isinstance(args[1], int):
+            super().__init__(args[0], args[1])
         else:
-            super().__init__(*args)
+            raise TypeError("Vector2() takes a Coord2, a tuple, or two integers")
 
     def manhattan_distance(self) -> int:
         return abs(self.x) + abs(self.y)
@@ -255,17 +274,26 @@ Vector2.UP = Vector2(0, -1)
 
 
 class Vector3(Coord3):
-    def __init__(self, *args):
+    def __init__(self, *args: int | tuple[int, int, int] | Coord3) -> None:
         if len(args) == 1 and isinstance(args[0], Coord3):
             self.x, self.y, self.z = args[0]
+        elif len(args) == 1 and isinstance(args[0], tuple):
+            super().__init__(args[0])
+        elif (
+            len(args) == 3
+            and isinstance(args[0], int)
+            and isinstance(args[1], int)
+            and isinstance(args[2], int)
+        ):
+            super().__init__(args[0], args[1], args[2])
         else:
-            super().__init__(*args)
+            raise TypeError("Vector2() takes a Coord2, a tuple, or two integers")
 
     def euclidean_distance(self) -> float:
         return (self.x**2 + self.y**2 + self.z**2) ** 0.5
 
 
-class Grid:
+class Grid[T]:
     DIRECTIONS = (
         (0, 1),
         (1, 0),
@@ -277,76 +305,86 @@ class Grid:
         (-1, 1),
     )
 
-    def __init__(self, grid: list[str]):
-        self.grid = grid
-        self.height = len(grid)
-        self.width = len(grid[0])
+    def __init__(self, grid: Iterable[Iterable[T]]):
+        self.grid: list[list[T]] = [list(row) for row in grid]
+        self.height = len(self.grid)
+        self.width = len(self.grid[0])
 
-    def __getitem__(self, pos: Coord2):
+    def __getitem__(self, pos: Coord2 | tuple[int, int]) -> T:
         x, y = pos
         if not pos in self:
             raise IndexError("Out of bounds")
         return self.grid[y][x]
 
-    def __setitem__(self, pos: Coord2, value):
+    def __setitem__(self, pos: Coord2 | tuple[int, int], value: T):
         x, y = pos
         if not pos in self:
             raise IndexError("Out of bounds")
-        self.grid[y] = self.grid[y][:x] + value + self.grid[y][x + 1 :]
+        self.grid[y][x] = value
 
-    def __str__(self):
-        return "\n".join(self.grid)
+    def __str__(self) -> str:
+        cells = [[str(value) for value in row] for row in self.grid]
+        cell_width = max(len(cell) for row in cells for cell in row)
+        if cell_width == 1:
+            return "\n".join("".join(row) for row in cells)
+        return "\n".join(
+            " ".join(cell.rjust(cell_width) for cell in row) for row in cells
+        )
 
-    def __contains__(self, pos: Coord2) -> bool:
+    def __contains__(self, pos: Coord2 | tuple[int, int]) -> bool:
         x, y = pos
         return 0 <= x < self.width and 0 <= y < self.height
 
+    def __iter__(self) -> Iterator[tuple[Coord2, T]]:
+        for y, row in enumerate(self.grid):
+            for x, value in enumerate(row):
+                yield Coord2(x, y), value
+
     @staticmethod
-    def dots(width: int, height: int) -> "Grid":
-        return Grid(["." * width] * height)
+    def filled[V](width: int, height: int, value: V) -> "Grid[V]":
+        return Grid([[value] * width for _ in range(height)])
 
-    def copy(self):
-        return Grid(self.grid.copy())
+    @staticmethod
+    def dots(width: int, height: int) -> "Grid[str]":
+        return Grid.filled(width, height, ".")
 
-    def is_in_bounds(self, pos: Coord2) -> bool:
+    def copy(self) -> "Grid[T]":
+        return Grid(self.grid)
+
+    def is_in_bounds(self, pos: Coord2 | tuple[int, int]) -> bool:
         return pos in self
 
-    def count(self, char: str) -> int:
-        return sum(row.count(char) for row in self.grid)
+    def count(self, value: object) -> int:
+        return sum(cell == value for row in self.grid for cell in row)
 
-    def find(self, string: str) -> Coord2:
+    def find(self, value: object) -> Coord2:
         """
-        Returns the first coordinate where the string is found
+        Returns the first coordinate where the value is found
         """
         for y, row in enumerate(self.grid):
-            x = row.find(string)
-            if x != -1:
-                return Coord2(x, y)
-        raise ValueError(f"{string} not found")
+            for x, cell in enumerate(row):
+                if cell == value:
+                    return Coord2(x, y)
+        raise ValueError(f"{value!r} not found")
 
-    def find_all(self, string: str) -> list[Coord2]:
+    def find_all(self, value: object) -> list[Coord2]:
         """
-        Returns a list of all coordinates where the string is found
+        Returns a list of all coordinates where the value is found
         """
-        coords = []
-        for y, row in enumerate(self.grid):
-            x = row.find(string)
-            while x != -1:
-                coords.append(Coord2(x, y))
-                x = row.find(string, x + 1)
-        return coords
-
-    def get_char_set(self, ignore="") -> set[str]:
-        char_set = {char for row in self.grid for char in row}
-        for char in ignore:
-            char_set.remove(char)
-        return char_set
-
-    def transposed(self) -> "Grid":
-        transposed_grid = [
-            "".join(row[i] for row in self.grid) for i in range(self.width)
+        return [
+            Coord2(x, y)
+            for y, row in enumerate(self.grid)
+            for x, cell in enumerate(row)
+            if cell == value
         ]
-        return Grid(transposed_grid)
+
+    def get_value_set(self, ignore: Iterable[object] = ()) -> set[T]:
+        value_set = {value for row in self.grid for value in row}
+        value_set.difference_update(ignore)
+        return value_set
+
+    def transposed(self) -> "Grid[T]":
+        return Grid(zip(*self.grid))
 
     def neighbors(
         self,
@@ -373,13 +411,13 @@ class Grid:
 
     def neighbor_values(
         self, pos: Coord2, diagonal=True, distance=1, include_self=False
-    ) -> list[str]:
+    ) -> list[T]:
         return [
             self[coord]
             for coord in self.neighbors(pos, diagonal, distance, include_self)
         ]
 
-    def get_any_direction_word_count(self, word: str) -> int:
+    def get_any_direction_word_count(self, word: Sequence[object]) -> int:
         sum = 0
         first_letter_coords = self.find_all(word[0])
         for coord in first_letter_coords:
@@ -400,8 +438,8 @@ class Grid:
 
     def get_pattern_count(
         self,
-        pattern: list[str],
-        wildcard="*",
+        pattern: Sequence[Sequence[object]],
+        wildcard: object = "*",
         any_rotation=False,
         v_mirror=False,
         h_mirror=False,
@@ -412,7 +450,7 @@ class Grid:
                 sum += self.get_pattern_count(
                     pattern, wildcard, v_mirror=v_mirror, h_mirror=h_mirror
                 )
-                pattern = list(zip(*pattern[::-1]))  # type: ignore TODO: fix this
+                pattern = list(zip(*pattern[::-1]))
             return sum
 
         if v_mirror:
@@ -448,11 +486,11 @@ class Grid:
 
     def a_star(
         self,
-        start_marker: str = "S",
-        goal_marker: str = "E",
+        start_marker: object = "S",
+        goal_marker: object = "E",
         start: Coord2 | None = None,
         goal: Coord2 | None = None,
-        inpassable: str = "#",
+        inpassable: object = "#",
     ) -> list[Coord2]:
         if start is None:
             start = self.find(start_marker)
