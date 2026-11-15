@@ -1,4 +1,4 @@
-from math import prod, sum
+from math import prod
 
 from aoc_utils import (
     Coord2,
