@@ -2,9 +2,9 @@
 default:
     @just --list
 
-# Run a solution, e.g. `just run 2024 12`
-run year day:
-    uv run {{year}}/d{{day}}.py
+# Run a solution: `just run 2024 12`, `just run -t` for today's, or `just run` for the last modified one
+run *args:
+    @uv run run-day {{args}}
 
 # Create a new day from the template, e.g. `just new 2025 13`
 new year day:

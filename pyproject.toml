@@ -12,6 +12,7 @@ dependencies = [
 
 [project.scripts]
 new-day = "aoc_utils.scaffold:main"
+run-day = "aoc_utils.runner:main"
 
 [dependency-groups]
 dev = ["ruff"]
