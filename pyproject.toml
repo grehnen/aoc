@@ -13,9 +13,16 @@ dependencies = [
 [project.scripts]
 new-day = "aoc_utils.scaffold:main"
 
+[dependency-groups]
+dev = ["ruff"]
+
 [build-system]
 requires = ["uv_build>=0.13,<0.14"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
 module-name = "aoc_utils"
+
+[tool.ruff.lint.pyflakes]
+# Keep unused helper imports so they are ready to use while solving.
+allowed-unused-imports = ["aoc_utils"]
