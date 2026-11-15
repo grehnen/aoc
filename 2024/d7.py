@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, ints
+from aoc_utils import fetch_input, ints
 
 file_content_a: List[str] = fetch_input(__file__)
 file_content_b: List[str] = file_content_a.copy()

@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input
+from aoc_utils import fetch_input
 import re
 
 file_content: List[str] = fetch_input(__file__)

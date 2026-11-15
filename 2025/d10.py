@@ -1,5 +1,5 @@
 from typing import List, NamedTuple
-from utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
+from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
 import heapq
 import z3
 

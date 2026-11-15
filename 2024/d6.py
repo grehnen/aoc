@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord2
+from aoc_utils import fetch_input, Grid, Coord2
 from datetime import datetime
 from concurrent.futures import as_completed, ProcessPoolExecutor
 import multiprocessing

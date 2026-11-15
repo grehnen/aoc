@@ -1,4 +1,0 @@
-# Don't ignore files in this folder
-!*
-# ...except for these files
-.env

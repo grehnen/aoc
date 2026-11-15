@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
+from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
 
 
 def solve_1(shapes: List[Grid], regions: List[Tuple[int, int, List[int]]]):

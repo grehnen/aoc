@@ -1,5 +1,5 @@
 from typing import List, Set
-from utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
+from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
 import time
 
 file_content: List[str] = fetch_input(__file__)

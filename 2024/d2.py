@@ -1,4 +1,4 @@
-from utils import fetch_input
+from aoc_utils import fetch_input
 
 file_content = fetch_input(__file__)
 

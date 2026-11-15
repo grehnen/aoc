@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, ints
+from aoc_utils import fetch_input, ints
 from collections import defaultdict
 
 file_content: List[str] = fetch_input(__file__)

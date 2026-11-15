@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid
+from aoc_utils import fetch_input, Grid
 
 file_content: List[str] = fetch_input(__file__)
 

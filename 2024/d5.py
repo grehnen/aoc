@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, ints
+from aoc_utils import fetch_input, Grid, ints
 from collections import defaultdict
 from functools import cmp_to_key
 

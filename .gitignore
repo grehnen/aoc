@@ -1,7 +1,4 @@
 input
 __pycache__
 .env
-
-# Ignore all symlinked files
-utils.py
 .venv

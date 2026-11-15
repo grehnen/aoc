@@ -1,5 +1,5 @@
 from typing import List
-from utils import fetch_input, Grid, Coord2, Vector2, ints, floats
+from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 from functools import cache
 
 file_content: List[str] = fetch_input(__file__)
