@@ -1,6 +1,7 @@
 import os
 import re
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import requests
 from dotenv import load_dotenv
@@ -40,16 +41,20 @@ def get_date(file: str) -> tuple[int, int]:
     filename = os.path.basename(file)
     day = int(
         "".join(filter(str.isdigit, filename))
-        or (datetime.today().day if datetime.today().day <= 25 else 1)
+        or (
+            datetime.now(tz=ZoneInfo("America/New_York")).day
+            if datetime.now(tz=ZoneInfo("America/New_York")).day <= 25
+            else 1
+        )
     )
 
     directory = os.path.basename(os.path.dirname(file))
     year = int(
         "".join(filter(str.isdigit, directory))
         or (
-            datetime.today().year
-            if datetime.today().month == 12
-            else datetime.today().year - 1
+            datetime.now(tz=ZoneInfo("America/New_York")).year
+            if datetime.now(tz=ZoneInfo("America/New_York")).month == 12
+            else datetime.now(tz=ZoneInfo("America/New_York")).year - 1
         )
     )
     return year, day
@@ -261,7 +266,7 @@ class Vector3(Coord3):
 
 
 class Grid:
-    DIRECTIONS = [
+    DIRECTIONS = (
         (0, 1),
         (1, 0),
         (0, -1),
@@ -270,7 +275,7 @@ class Grid:
         (-1, -1),
         (1, -1),
         (-1, 1),
-    ]
+    )
 
     def __init__(self, grid: list[str]):
         self.grid = grid
@@ -332,7 +337,7 @@ class Grid:
         return coords
 
     def get_char_set(self, ignore="") -> set[str]:
-        char_set = set(char for row in self.grid for char in row)
+        char_set = {char for row in self.grid for char in row}
         for char in ignore:
             char_set.remove(char)
         return char_set

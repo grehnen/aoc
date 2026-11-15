@@ -44,7 +44,6 @@ def solve(
     distance_dict: dict[float, tuple[Coord3, Coord3]] = {}
     for i, coord_a in enumerate(all_coords):
         for coord_b in all_coords[i + 1 :]:
-            vector = Vector3(coord_b - coord_a)
             distance = Vector2.euclidean_distance()
             all_distances.append(distance)
             distance_dict[distance] = (coord_a, coord_b)

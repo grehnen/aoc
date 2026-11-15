@@ -18,7 +18,7 @@ output = []
 
 
 def call_function(opcode, l_operand, part_2=False):
-    global a, b, c, i, instructions
+    global a, b, c, i
     if l_operand <= 3:
         c_operand = l_operand
     else:

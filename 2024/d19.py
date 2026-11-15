@@ -18,10 +18,10 @@ for pattern in file_content[2:]:
     for i in range(len(pattern)):
         if not valid_lengths[i]:
             continue
-        for j in towels:
+        for j, value in towels.items():
             if i + j > len(pattern):
                 continue
-            if pattern[i : i + j] in towels[j]:
+            if pattern[i : i + j] in value:
                 if i + j == len(pattern):
                     sum_b += valid_lengths[i]
                     pattern_valid = True
