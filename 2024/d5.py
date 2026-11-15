@@ -1,9 +1,9 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, ints
 from collections import defaultdict
 from functools import cmp_to_key
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Grid, fetch_input, ints
+
+file_content: list[str] = fetch_input(__file__)
 
 rules = defaultdict(lambda: {"before": set(), "after": set()})
 

@@ -1,9 +1,8 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
-robots: List[dict] = []
+robots: list[dict] = []
 WIDTH = 101
 HEIGHT = 103
 SECONDS = 10000
@@ -23,7 +22,7 @@ quad_3 = 0
 quad_4 = 0
 
 
-def print_grid(robots: List[dict], width: int, height: int, second):
+def print_grid(robots: list[dict], width: int, height: int, second):
     grid = Grid.dots(width, height)
     for robot in robots:
         grid[robot["position"]] = "#"

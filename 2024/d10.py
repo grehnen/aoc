@@ -1,8 +1,8 @@
-from typing import List
-from aoc_utils import fetch_input, Grid
 from datetime import datetime
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Grid, fetch_input
+
+file_content: list[str] = fetch_input(__file__)
 
 grid = Grid(file_content)
 

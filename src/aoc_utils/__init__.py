@@ -1,14 +1,15 @@
 import os
-import requests
 import re
 from datetime import datetime
 from typing import List, Set
+
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-def fetch_input(file_path: str) -> List[str]:
+def fetch_input(file_path: str) -> list[str]:
     year, day = get_date(file_path)
     file_dir = os.path.dirname(os.path.abspath(file_path))
     input_dir = os.path.join(file_dir, "input")
@@ -55,16 +56,16 @@ def get_date(file: str) -> tuple[int, int]:
     return year, day
 
 
-def get_file_content(filename: str) -> List[str]:
+def get_file_content(filename: str) -> list[str]:
     with open(filename, "r") as file:
         return file.read().splitlines()
 
 
-def ints(string: str) -> List[int]:
+def ints(string: str) -> list[int]:
     return [int(i) for i in re.findall(r"-?\d+", string)]
 
 
-def floats(string: str) -> List[float]:
+def floats(string: str) -> list[float]:
     return [float(i) for i in re.findall(r"-?\d+(?:\.\d+)?", string)]
 
 
@@ -146,7 +147,7 @@ class Coord2:
     def __mod__(self, other: "Coord2") -> "Coord2":
         return Coord2(self.x % other.x, self.y % other.y)
 
-    def get_line_to(self, other: "Coord2", overstep=0) -> List["Coord2"]:
+    def get_line_to(self, other: "Coord2", overstep=0) -> list["Coord2"]:
         if self.x == other.x:
             step = 1 if self.y < other.y else -1
             start_point = self.y - overstep * step
@@ -160,10 +161,8 @@ class Coord2:
         else:
             raise ValueError("Only horizontal or vertical lines are supported")
 
-    def get_neighbors(
-        self, diagonal=True
-    ) -> Set["Coord2"]:
-        neighbors: Set[Coord2] = set()
+    def get_neighbors(self, diagonal=True) -> set["Coord2"]:
+        neighbors: set[Coord2] = set()
         for v in Vector2.all_directions(diagonal):
             neighbors.add(self + v)
         return neighbors
@@ -239,7 +238,7 @@ class Vector2(Coord2):
         return Vector2(super().__add__(other))
 
     @staticmethod
-    def all_directions(diagonal=True) -> List["Vector2"]:
+    def all_directions(diagonal=True) -> list["Vector2"]:
         directions = [Vector2(0, 1), Vector2(1, 0), Vector2(0, -1), Vector2(-1, 0)]
         if diagonal:
             directions += [
@@ -281,7 +280,7 @@ class Grid:
         (-1, 1),
     ]
 
-    def __init__(self, grid: List[str]):
+    def __init__(self, grid: list[str]):
         self.grid = grid
         self.height = len(grid)
         self.width = len(grid[0])
@@ -328,7 +327,7 @@ class Grid:
                 return Coord2(x, y)
         raise ValueError(f"{string} not found")
 
-    def find_all(self, string: str) -> List[Coord2]:
+    def find_all(self, string: str) -> list[Coord2]:
         """
         Returns a list of all coordinates where the string is found
         """
@@ -359,7 +358,7 @@ class Grid:
         distance=1,
         include_self=False,
         include_out_of_bounds=False,
-    ) -> List[Coord2]:
+    ) -> list[Coord2]:
         x, y = pos
         offsets = [
             (dx, dy)
@@ -377,7 +376,7 @@ class Grid:
 
     def neighbor_values(
         self, pos: Coord2, diagonal=True, distance=1, include_self=False
-    ) -> List[str]:
+    ) -> list[str]:
         return [
             self[coord]
             for coord in self.neighbors(pos, diagonal, distance, include_self)
@@ -404,7 +403,7 @@ class Grid:
 
     def get_pattern_count(
         self,
-        pattern: List[str],
+        pattern: list[str],
         wildcard="*",
         any_rotation=False,
         v_mirror=False,
@@ -457,7 +456,7 @@ class Grid:
         start: Coord2 | None = None,
         goal: Coord2 | None = None,
         inpassable: str = "#",
-    ) -> List[Coord2]:
+    ) -> list[Coord2]:
         if start is None:
             start = self.find(start_marker)
         if goal is None:

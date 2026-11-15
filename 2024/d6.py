@@ -1,10 +1,10 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2
-from datetime import datetime
-from concurrent.futures import as_completed, ProcessPoolExecutor
 import multiprocessing
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from datetime import datetime
 
-ORIENTATIONS: List[Coord2] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+from aoc_utils import Coord2, Grid, fetch_input
+
+ORIENTATIONS: list[Coord2] = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
 
 def test_position_func(test_position, grid2p, start_position):
@@ -43,7 +43,7 @@ def move_one_step(
 
 
 if __name__ == "__main__":
-    file_content: List[str] = fetch_input(__file__)
+    file_content: list[str] = fetch_input(__file__)
 
     grid = Grid(file_content.copy())
 

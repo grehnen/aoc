@@ -1,11 +1,10 @@
-from typing import List
-from aoc_utils import fetch_input, Grid
+from aoc_utils import Grid, fetch_input
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
 line = file_content[0]
 
-full_drive_a: List[int | None] = []
+full_drive_a: list[int | None] = []
 
 for i in range(0, len(line), 2):
     file_size = int(line[i])

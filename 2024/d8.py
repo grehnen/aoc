@@ -1,7 +1,6 @@
-from typing import List
-from aoc_utils import fetch_input, Grid
+from aoc_utils import Grid, fetch_input
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
 antenna_grid = Grid(file_content)
 anti_node_grid_a = Grid.dots(antenna_grid.width, antenna_grid.height)

@@ -1,6 +1,5 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
 print(file_content)

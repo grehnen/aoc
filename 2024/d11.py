@@ -1,14 +1,14 @@
-from typing import List
-from aoc_utils import fetch_input, ints
 from collections import defaultdict
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import fetch_input, ints
+
+file_content: list[str] = fetch_input(__file__)
 
 starting_stones = ints(file_content[0])
 stones = defaultdict(int)
 
 
-def transform_stone(stone) -> List[int]:
+def transform_stone(stone) -> list[int]:
     if stone == 0:
         return [1]
     elif len(str(stone)) % 2 == 0:

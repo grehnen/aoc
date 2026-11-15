@@ -1,7 +1,16 @@
-from typing import List, Set
-from aoc_utils import Coord3, fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, prod
+from aoc_utils import (
+    Coord2,
+    Coord3,
+    Grid,
+    Vector2,
+    Vector3,
+    fetch_input,
+    floats,
+    ints,
+    prod,
+)
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 examples = [
     "162,817,812",
     "57,618,57",
@@ -28,9 +37,9 @@ ITERATIONS = 1_000
 
 
 def solve(
-    all_coords: List[Coord3],
+    all_coords: list[Coord3],
 ):
-    all_distances: List[float] = []
+    all_distances: list[float] = []
     distance_dict: dict[float, tuple[Coord3, Coord3]] = {}
     for i, coord_a in enumerate(all_coords):
         for coord_b in all_coords[i + 1 :]:
@@ -41,7 +50,7 @@ def solve(
 
     all_distances.sort()
 
-    clusters: List[Set[Coord3]] = []
+    clusters: list[set[Coord3]] = []
     answer_1 = None
     answer_2 = None
     for j, distance in enumerate(all_distances):
@@ -55,22 +64,22 @@ def solve(
             if coord_a in intersection or coord_b in intersection:
                 if first_cluster_index is None:
                     first_cluster_index = i
-                    clusters[i].add(coord_a)
-                    clusters[i].add(coord_b)
+                    cluster.add(coord_a)
+                    cluster.add(coord_b)
                 else:
                     clusters[first_cluster_index].update(cluster)
                     clusters.pop(i)
                     break
         if first_cluster_index is None:
             clusters.append({coord_a, coord_b})
-        
+
         if j == ITERATIONS - 1:
             clusters.sort(key=len, reverse=True)
             answer_1 = prod(len(cluster) for cluster in clusters[:3])
-        
+
         if len(clusters) == 1 and len(clusters[0]) == len(all_coords):
             answer_2 = coord_a.x * coord_b.x
-        
+
         if answer_1 and answer_2:
             return answer_1, answer_2
 

@@ -1,8 +1,8 @@
 from collections import defaultdict
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
+
+file_content: list[str] = fetch_input(__file__)
 towels: dict[int, set[str]] = defaultdict(set)
 
 for towel in file_content[0].split(", "):

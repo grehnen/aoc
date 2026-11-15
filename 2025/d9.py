@@ -1,8 +1,6 @@
-from typing import List, Set
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
-import time
+from aoc_utils import Coord2, Coord3, Grid, Vector2, Vector3, fetch_input, floats, ints
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 example = [
     "7,1",
     "11,1",
@@ -13,12 +11,12 @@ example = [
     "2,3",
     "7,3",
 ]
-coords: List[Coord2] = []
+coords: list[Coord2] = []
 for line in file_content:
     coords.append(Coord2(*ints(line)))
 
 
-def solve_1(coords: List[Coord2]):
+def solve_1(coords: list[Coord2]):
     max_size = 0
     for i, coord in enumerate(coords):
         for coord2 in coords[i + 1 :]:
@@ -28,9 +26,9 @@ def solve_1(coords: List[Coord2]):
     return max_size
 
 
-def solve_2(coords: List[Coord2]):
+def solve_2(coords: list[Coord2]):
     max_size = 0
-    edge_coords: Set[Coord2] = set()
+    edge_coords: set[Coord2] = set()
     for i in range(len(coords)):
         cur_coord = coords[i]
         next_coord = coords[(i + 1) % len(coords)]

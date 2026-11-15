@@ -1,8 +1,8 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 import numpy as np
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
+
+file_content: list[str] = fetch_input(__file__)
 
 examples = [
     "123 328  51 64 ",
@@ -12,7 +12,7 @@ examples = [
 ]
 
 
-def calc_row(num_str: List[str], op: str) -> int:
+def calc_row(num_str: list[str], op: str) -> int:
     if op == "+":
         return sum(int(x) for x in num_str)
     elif op == "*":
@@ -23,7 +23,7 @@ def calc_row(num_str: List[str], op: str) -> int:
     return 0
 
 
-def calc_rows(rows: List[List[str]]) -> int:
+def calc_rows(rows: list[list[str]]) -> int:
     count = 0
     for row in rows:
         count += calc_row(row[:-1], row[-1])
@@ -36,7 +36,7 @@ def solve_1(input) -> int:
     for line in input:
         matrix.append(line.split())
     nump_array = np.array(matrix)
-    transposed: List[List[str]] = nump_array.T.tolist()
+    transposed: list[list[str]] = nump_array.T.tolist()
 
     return calc_rows(transposed)
 

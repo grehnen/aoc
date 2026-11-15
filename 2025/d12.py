@@ -1,13 +1,15 @@
-from typing import List, Tuple
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
+from aoc_utils import Coord2, Coord3, Grid, Vector2, Vector3, fetch_input, floats, ints
 
 
-def solve_1(shapes: List[Grid], regions: List[Tuple[int, int, List[int]]]):
+def solve_1(shapes: list[Grid], regions: list[tuple[int, int, list[int]]]):
     count = 0
     for region in regions:
         x_size, y_size, shape_counts = region
 
-        if sum(x.count("#") * shape_counts[i] for i, x in enumerate(shapes)) < x_size * y_size:
+        if (
+            sum(x.count("#") * shape_counts[i] for i, x in enumerate(shapes))
+            < x_size * y_size
+        ):
             count += 1
 
     return count
@@ -20,14 +22,14 @@ def solve_2():
 
 
 if __name__ == "__main__":
-    file_content: List[str] = fetch_input(__file__)
+    file_content: list[str] = fetch_input(__file__)
 
-    shapes: List[Grid] = []
+    shapes: list[Grid] = []
     for shape_i in range(6):
         shape = Grid(file_content[shape_i * 5 + 1 : shape_i * 5 + 4])
         shapes.append(shape)
 
-    regions: List[Tuple[int, int, List[int]]] = []
+    regions: list[tuple[int, int, list[int]]] = []
     last_empty = max(i for i, line in enumerate(file_content) if line == "")
     regions = []
     for region in file_content[last_empty + 1 :]:

@@ -1,7 +1,6 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
 example = [
     "3-5",
@@ -17,19 +16,20 @@ example = [
     "32",
 ]
 
-def massage(input: List[str]):
+
+def massage(input: list[str]):
     empty_line_index = input.index("")
     fresh_ingredients = input[:empty_line_index]
     available_ingredients = input[empty_line_index + 1 :]
 
-    fresh_ranges: List[range] = []
+    fresh_ranges: list[range] = []
     for line in fresh_ingredients:
         start, end = line.split("-")
         fresh_ranges.append(range(int(start), int(end)))
     return available_ingredients, fresh_ranges
 
 
-def solve_1(available_ingredients: List[str], fresh_ranges: List[range]):
+def solve_1(available_ingredients: list[str], fresh_ranges: list[range]):
     count = 0
     for ingredient in available_ingredients:
         for r in fresh_ranges:
@@ -40,10 +40,10 @@ def solve_1(available_ingredients: List[str], fresh_ranges: List[range]):
     return count
 
 
-def solve_2(fresh_ranges: List[range]):
+def solve_2(fresh_ranges: list[range]):
     count = 0
     fresh_ranges.sort(key=lambda r: r.start)
-    merged_ranges: List[range] = []
+    merged_ranges: list[range] = []
     for i in range(len(fresh_ranges)):
         line = fresh_ranges[i]
         next_index = i + 1

@@ -1,8 +1,8 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats
 from datetime import datetime
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Coord2, Grid, Vector2, fetch_input, floats, ints
+
+file_content: list[str] = fetch_input(__file__)
 
 TIME_SAVE_LIMIT = 100
 

@@ -1,9 +1,7 @@
-from typing import List
-from aoc_utils import fetch_input, Grid
+from aoc_utils import Grid, fetch_input
 
-file_content: List[str] = fetch_input(__file__)
+file_content: list[str] = fetch_input(__file__)
 
-import re
 
 grid = Grid(file_content)
 

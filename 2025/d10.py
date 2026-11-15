@@ -1,9 +1,10 @@
-from typing import List, NamedTuple
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
 import heapq
+
 import z3
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Coord2, Coord3, Grid, Vector2, Vector3, fetch_input, floats, ints
+
+file_content: list[str] = fetch_input(__file__)
 example = [
     "[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}",
     "[...#.] (0,2,3,4) (2,3) (0,4) (0,1,2) (1,2,3,4) {7,5,12,7,2}",
@@ -11,7 +12,7 @@ example = [
 ]
 
 
-def press_button_1(lights: tuple[bool, ...], button: tuple[int, ...]) -> List[bool]:
+def press_button_1(lights: tuple[bool, ...], button: tuple[int, ...]) -> list[bool]:
     new_lights = list(lights)
     for index in button:
         new_lights[index] = not lights[index]
@@ -43,7 +44,7 @@ def solve_row_1(line: dict) -> int:
     raise ValueError("No solution found")
 
 
-def solve_1(lines: List[dict]) -> int:
+def solve_1(lines: list[dict]) -> int:
     count = 0
     for line in lines:
         count += solve_row_1(line)
@@ -68,7 +69,7 @@ def solve_row_2(line: dict) -> int:
     for var in button_vars:
         optimizer.add(var >= 0)
 
-    jolt_buttons: List[tuple[list[int], int]] = []
+    jolt_buttons: list[tuple[list[int], int]] = []
 
     # Map each jolt index to the buttons that affect it
     for jc_i, jolt_goal in enumerate(wanted_jolt):
@@ -81,7 +82,7 @@ def solve_row_2(line: dict) -> int:
     for button_indexes, jolt_goal in jolt_buttons:
         # Create a sum expression that sums the presses of the affecting buttons for this jolt counter
         jolt_sum = z3.Sum([button_vars[b_i] for b_i in button_indexes])
-        
+
         # Add constraint that this sum equals the wanted jolt count
         optimizer.add(jolt_sum == jolt_goal)
 
@@ -96,7 +97,7 @@ def solve_row_2(line: dict) -> int:
     raise ValueError("No solution found")
 
 
-def solve_2(lines: List[dict]) -> int:
+def solve_2(lines: list[dict]) -> int:
     count = 0
     for line in lines:
         count += solve_row_2(line)
@@ -105,7 +106,7 @@ def solve_2(lines: List[dict]) -> int:
 
 
 if __name__ == "__main__":
-    lines: List[dict] = []
+    lines: list[dict] = []
 
     for line in file_content:
         s_line = line.split()

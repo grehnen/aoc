@@ -1,11 +1,10 @@
-from typing import List
 from aoc_utils import fetch_input, ints
 
-file_content_a: List[str] = fetch_input(__file__)
-file_content_b: List[str] = file_content_a.copy()
+file_content_a: list[str] = fetch_input(__file__)
+file_content_b: list[str] = file_content_a.copy()
 
 
-def f(total, terms, mode) -> List[int]:
+def f(total, terms, mode) -> list[int]:
     if len(terms) == 2:
         results = [terms[0] + terms[1], terms[0] * terms[1]]
         if mode == "b":

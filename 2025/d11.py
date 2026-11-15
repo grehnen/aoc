@@ -1,8 +1,8 @@
-from typing import List
-from aoc_utils import fetch_input, Grid, Coord2, Vector2, ints, floats, Vector3, Coord3
 from functools import cache
 
-file_content: List[str] = fetch_input(__file__)
+from aoc_utils import Coord2, Coord3, Grid, Vector2, Vector3, fetch_input, floats, ints
+
+file_content: list[str] = fetch_input(__file__)
 
 
 mapping_1 = {}
