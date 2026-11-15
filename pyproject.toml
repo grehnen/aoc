@@ -25,4 +25,4 @@ module-name = "aoc_utils"
 
 [tool.ruff.lint.pyflakes]
 # Keep unused helper imports so they are ready to use while solving.
-allowed-unused-imports = ["aoc_utils"]
+allowed-unused-imports = ["aoc_utils", "math"]

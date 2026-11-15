@@ -1,3 +1,5 @@
+from math import prod
+
 from aoc_utils import (
     Coord2,
     Coord3,
@@ -7,7 +9,6 @@ from aoc_utils import (
     fetch_input,
     floats,
     ints,
-    prod,
 )
 
 file_content: list[str] = fetch_input(__file__)

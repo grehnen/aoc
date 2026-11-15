@@ -1,7 +1,6 @@
 import os
 import re
 from datetime import datetime
-from typing import List, Set
 
 import requests
 from dotenv import load_dotenv
@@ -67,13 +66,6 @@ def ints(string: str) -> list[int]:
 
 def floats(string: str) -> list[float]:
     return [float(i) for i in re.findall(r"-?\d+(?:\.\d+)?", string)]
-
-
-def prod(iterable):
-    result = 1
-    for x in iterable:
-        result *= x
-    return result
 
 
 class Coord2:

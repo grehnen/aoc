@@ -1,4 +1,15 @@
-from aoc_utils import Coord2, Coord3, Grid, Vector2, Vector3, fetch_input, floats, ints
+from math import prod, sum
+
+from aoc_utils import (
+    Coord2,
+    Coord3,
+    Grid,
+    Vector2,
+    Vector3,
+    fetch_input,
+    floats,
+    ints,
+)
 
 file_content: list[str] = fetch_input(__file__)
 
