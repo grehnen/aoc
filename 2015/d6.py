@@ -20,14 +20,18 @@ def solve_1():
         x1, y1, x2, y2 = ints(line)
         corner_1 = Coord2(x1, y1)
         corner_2 = Coord2(x2, y2)
-        for coord, value in grid:
-            if coord.is_inside_square(corner_1, corner_2, True):
-                if line.startswith("turn off"):
-                    grid[coord] = False
-                elif line.startswith("turn on"):
-                    grid[coord] = True
-                else:
-                    grid[coord] = not grid[coord]
+        if line.startswith("turn off"):
+            new_value = False
+        elif line.startswith("turn on"):
+            new_value = True
+        else:
+            new_value = None
+
+        for coord in Coord2.get_square_members(corner_1, corner_2, True):
+            if new_value == None:
+                grid[coord] = not grid[coord]
+            else:
+                grid[coord] = new_value
 
     return grid.count(True)
 
@@ -38,14 +42,16 @@ def solve_2():
         x1, y1, x2, y2 = ints(line)
         corner_1 = Coord2(x1, y1)
         corner_2 = Coord2(x2, y2)
-        for coord, value in grid:
-            if coord.is_inside_square(corner_1, corner_2, True):
-                if line.startswith("turn off"):
-                    grid[coord] = max(value - 1, 0)
-                elif line.startswith("turn on"):
-                    grid[coord] += 1
-                else:
-                    grid[coord] += 2
+
+        if line.startswith("turn off"):
+            modifier = -1
+        elif line.startswith("turn on"):
+            modifier = 1
+        else:
+            modifier = 2
+
+        for coord in Coord2.get_square_members(corner_1, corner_2, True):
+            grid[coord] = max(grid[coord] + modifier, 0)
 
     return sum(value for _, value in grid)
 

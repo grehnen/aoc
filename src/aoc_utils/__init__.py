@@ -181,7 +181,24 @@ class Coord2:
         if include_border:
             return (min_x <= self.x <= max_x) and (min_y <= self.y <= max_y)
         return (min_x < self.x < max_x) and (min_y < self.y < max_y)
-    
+
+    @staticmethod
+    def get_square_members(
+        corner_1: "Coord2", corner_2: "Coord2", include_border: bool
+    ) -> set["Coord2"]:
+        min_x: int = min(corner_1.x, corner_2.x)
+        max_x: int = max(corner_1.x, corner_2.x)
+        min_y: int = min(corner_1.y, corner_2.y)
+        max_y: int = max(corner_1.y, corner_2.y)
+
+        if include_border:
+            max_x += 1
+            max_y += 1
+        else:
+            min_x += 1
+            min_y += 1
+
+        return {Coord2(x, y) for x in range(min_x, max_x) for y in range(min_y, max_y)}
 
 
 class Coord3:
